@@ -1,6 +1,6 @@
-# Run this script via $ R < packages.R to install all dependencies that cannot be installed trough conda.
+# Run this script via $ R < packages.R to install all R dependencies.
 repos = getOption("repos")
-repos["CRAN"] = "cran.r-project.org"
+repos["CRAN"] = "https://cran.r-project.org"
 options(repos = repos)
 install.packages("surveillance")
 install.packages("gamlss")
