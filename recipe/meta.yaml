@@ -47,13 +47,12 @@ requirements:
   host:
     - python=3.7
     - pip
-    - r-base
+    - r-base=3.5
     - rpy2
     - numpy=1.16
-#    - r-essentials
+    - r-essentials
   run:
     - python=3.7
-    - r-base
     - r-essentials
     - rpy2
     - numpy
