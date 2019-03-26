@@ -132,6 +132,9 @@ class SurveillanceRPackageAlgorithm(TimepointSurveillanceAlgorithm):
         """Extract the binary alarm array from the surveillance result R data structure."""
         raise NotImplementedError
 
+    def _call_surveillance_algo(self, sts, detection_range):
+        raise NotImplementedError
+
 
 class STSBasedAlgorithm(SurveillanceRPackageAlgorithm):
     """Base class for algorithms that operate on the STS (SurveillanceTimeSeries) class."""
