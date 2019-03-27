@@ -53,6 +53,7 @@ requirements:
     - r-essentials
   run:
     - python=3.7
+    - libgfortran=3
     - r-essentials
     - rpy2
     - numpy

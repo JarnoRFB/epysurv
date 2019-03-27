@@ -6,7 +6,8 @@ import matplotlib.pyplot as plt
 import plotnine as gg
 
 
-def plot_confusion_matrix(confusion_matrix: np.ndarray, class_names: list, ax: matplotlib.axes.Axes = None):
+def plot_confusion_matrix(confusion_matrix: np.ndarray, class_names: list,
+                          ax: matplotlib.axes.Axes = None) -> matplotlib.axes.Axes:
     """Plots a confusion matrix, as returned by sklearn.metrics.confusion_matrix, as a heatmap.
 
     Based on https://gist.github.com/shaypal5/94c53d765083101efc0240d776a23823
@@ -38,11 +39,12 @@ def plot_confusion_matrix(confusion_matrix: np.ndarray, class_names: list, ax: m
     return ax
 
 
-def plot_prediction(train_data, test_data, prediction) -> matplotlib.figure.Figure:
+def plot_prediction(train_data, test_data, prediction, ax: matplotlib.axes.Axes = None) -> matplotlib.axes.Axes:
     """Plots case counts as step line, with outbreaks and alarms indicated by triangles."""
     whole_data = pd.concat((train_data, test_data), sort=False)
     fontsize = 20
-    fig, ax = plt.subplots(figsize=(12, 8))
+    if ax is None:
+        fig, ax = plt.subplots(figsize=(12, 8))
     ax.step(x=whole_data.index, y=whole_data.n_cases, where='mid',
             color='blue', label='_nolegend_')
     alarms = prediction.query('alarm == 1')
@@ -53,7 +55,7 @@ def plot_prediction(train_data, test_data, prediction) -> matplotlib.figure.Figu
     ax.set_ylabel('cases', fontsize=fontsize)
     ax.legend(fontsize='xx-large')
 
-    return fig
+    return ax
 
 
 def ghozzi_score_plot(prediction_result: pd.DataFrame, filename: str):

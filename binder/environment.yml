@@ -5,3 +5,4 @@ channels:
 dependencies:
   - python=3.7
   - epysurv
+  - libgfortran=3
