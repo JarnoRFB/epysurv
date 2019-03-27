@@ -6,7 +6,8 @@ Epidemiological Surveillance in Python
 
 ## Installation
 
-    conda config --add channels conda-forge jarnorfb 
+    conda config --add channels conda-forge 
+    conda config --add channels jarnorfb 
     conda install epysurv
 
     
