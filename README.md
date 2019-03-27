@@ -1,3 +1,4 @@
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/JarnoRFB/epysurv/master?urlpath=lab/tree/demo.ipynb)
 [![Build Status](https://travis-ci.com/JarnoRFB/epysurv.svg?token=dmY4GfBz2Rs5oxYeuMhW&branch=master)](https://travis-ci.com/JarnoRFB/epysurv)
 
 # epysurv
