@@ -1,0 +1,7 @@
+name: epysurv
+channels:
+  - conda-forge
+  - jarnorfb
+dependencies:
+  - python=3.7
+  - epysurv
