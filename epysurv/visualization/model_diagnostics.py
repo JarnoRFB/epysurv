@@ -6,8 +6,7 @@ import matplotlib.pyplot as plt
 import plotnine as gg
 
 
-def plot_confusion_matrix(confusion_matrix: np.ndarray, class_names: list,
-                          figsize: tuple = (15, 12)) -> matplotlib.figure.Figure:
+def plot_confusion_matrix(confusion_matrix: np.ndarray, class_names: list, ax: matplotlib.axes.Axes = None):
     """Plots a confusion matrix, as returned by sklearn.metrics.confusion_matrix, as a heatmap.
 
     Based on https://gist.github.com/shaypal5/94c53d765083101efc0240d776a23823
@@ -31,11 +30,12 @@ def plot_confusion_matrix(confusion_matrix: np.ndarray, class_names: list,
     df_cm = pd.DataFrame(
         confusion_matrix, index=class_names, columns=class_names,
     )
-    fig, ax = plt.subplots(figsize=figsize)
-    heatmap = sns.heatmap(df_cm, annot=True, cmap="Blues")
+    if ax is None:
+        fig, ax = plt.subplots()
+    heatmap = sns.heatmap(df_cm, annot=True, cmap="Blues", ax=ax)
     heatmap.set(ylabel='True label', xlabel='Predicted label')
 
-    return fig
+    return ax
 
 
 def plot_prediction(train_data, test_data, prediction) -> matplotlib.figure.Figure:
