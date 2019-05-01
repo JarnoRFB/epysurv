@@ -44,3 +44,6 @@ install:
 script:
   - PYTHONPATH=. pytest tests/
   - PYTHONPATH=. pytest --mypy -m mypy tests/
+
+after_success:
+  - codecov
