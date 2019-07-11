@@ -27,7 +27,7 @@ before_install:
       conda config --set always_yes yes --set changeps1 no;
       conda update -q conda;
       conda info -a;
-      conda create -q -n test-environment python=3.7 r-essentials rpy2;
+      conda create -q -n test-environment python=3.7 r-base=3.5 r-gamlss r-gridbase r-mglm r-msm r-surveillance rpy2;
     fi
 
 install:
@@ -35,11 +35,10 @@ install:
   # Useful for debugging any issues with conda
   - conda info -a
   - source activate test-environment
-  - R < packages.R --no-save
   - pip install -r requirements-dev.txt
 
 script:
-  # - PYTHONPATH=. pytest --mypy -m mypy tests/
+  - PYTHONPATH=. pytest --mypy -m mypy tests/
   - PYTHONPATH=. pytest --cov=epysurv tests/
 
 after_success:
