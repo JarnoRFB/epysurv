@@ -6,14 +6,12 @@ cache:
     - $HOME/download
     - $HOME/miniconda
 
-env:
-  - CODECOV_TOKEN="fdc7ac12-1a62-4f67-82ef-51fb4d8e3248"
-
 before_cache:
   - if ! [[ $TRAVIS_TAG ]]; then rm -rf $HOME/miniconda/conda-bld; fi
   - rm -rf $HOME/miniconda/locks $HOME/miniconda/pkgs $HOME/miniconda/var $HOME/miniconda/conda-meta/history
 
 before_install:
+  # Caches the conda installation and env across builds.
   - if test -e $HOME/miniconda/bin; then
       echo "miniconda already installed.";
     else
@@ -33,7 +31,7 @@ before_install:
 
 install:
   - export PATH="$HOME/miniconda/bin:$PATH"
-  # Useful for debugging any issues with conda
+  # Useful for debugging any issues with conda.
   - conda info -a
   - source activate test-environment
   - pip install -r requirements-dev.txt
