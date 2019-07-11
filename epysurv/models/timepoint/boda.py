@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+import warnings
 
 from rpy2 import robjects
 from rpy2.robjects import r
@@ -6,6 +7,11 @@ from rpy2.robjects.packages import importr
 
 from ._base import STSBasedAlgorithm
 
+warnings.warn(
+    'For the Boda algortihm to run you need the INLA package (http://www.r-inla.org/). '
+    'Install it by running install.packages("INLA", repos = c(getOption("repos"), INLA = "https://inla.r-inla-download.org/R/stable"), dep = TRUE) '
+    'in the R console.'
+)
 surveillance = importr('surveillance')
 
 
