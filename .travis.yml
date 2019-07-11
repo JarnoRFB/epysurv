@@ -39,8 +39,8 @@ install:
   - pip install -r requirements-dev.txt
 
 script:
-  - PYTHONPATH=. pytest tests/
   - PYTHONPATH=. pytest --mypy -m mypy tests/
+  - PYTHONPATH=. pytest --cov=epysurv tests/
 
 after_success:
   - codecov
