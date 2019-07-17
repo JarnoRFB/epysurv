@@ -17,11 +17,9 @@ that strives to implement a `scikit-learn` like API for epidemiological surveill
 
 
 ## Installation
-As `epysurv` requires both Python and R it can only be conveniently installed trough `conda`:
+As `epysurv` requires both Python and R it can only be conveniently installed trough [`conda`](https://docs.conda.io/en/latest/):
 
-    conda config --add channels conda-forge 
-    conda config --add channels jarnorfb 
-    conda install epysurv
+    conda install -c conda-forge epysurv 
 
 ## Documentation
 Coming soon... For now see [`demo.ipynb`](demo.ipynb).
