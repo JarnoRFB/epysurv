@@ -10,7 +10,7 @@ with open(os.path.join(_here, "README.md"), encoding="utf-8") as f:
 
 setup(
     name=package,
-    version="0.0.2",
+    version="0.0.3",
     description="Epidemiological surveillance in Python.",
     long_description=long_description,
     author="Rüdiger Busche",
