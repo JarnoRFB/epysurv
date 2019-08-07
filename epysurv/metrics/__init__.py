@@ -1,1 +1,1 @@
-from .outbreak_detection import *
+from .outbreak_detection import ghozzi_score
