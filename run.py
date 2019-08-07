@@ -5,7 +5,9 @@ from epysurv.models import timepoint
 
 
 def read_surv_data(filename):
-    data = pd.read_csv(filename, index_col=0, parse_dates=True, infer_datetime_format=True)
+    data = pd.read_csv(
+        filename, index_col=0, parse_dates=True, infer_datetime_format=True
+    )
     data.index.freq = pd.infer_freq(data.index)
     return data
 
@@ -14,7 +16,13 @@ def plot_prediction(train_data, prediction):
     prediction = pd.concat((train_data, prediction), sort=False)
     fontsize = 20
     fig, ax = plt.subplots(figsize=(12, 8))
-    ax.step(x=prediction.index, y=prediction.n_cases, where="mid", color="blue", label="_nolegend_")
+    ax.step(
+        x=prediction.index,
+        y=prediction.n_cases,
+        where="mid",
+        color="blue",
+        label="_nolegend_",
+    )
     outbreaks = prediction.query("alarm == 1")
     ax.plot(outbreaks.index, outbreaks.n_cases, "r^", label="alarm", markersize=12)
     ax.set_xlabel("time", fontsize=fontsize)

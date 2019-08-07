@@ -28,7 +28,10 @@ class RKI(STSBasedAlgorithm):
 
     def _call_surveillance_algo(self, sts, detection_range):
         control = r.list(
-            range=detection_range, b=self.years_back, w=self.window_half_width, actY=self.include_recent_year
+            range=detection_range,
+            b=self.years_back,
+            w=self.window_half_width,
+            actY=self.include_recent_year,
         )
 
         surv = surveillance.rki(sts, control=control)

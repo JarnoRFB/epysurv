@@ -23,7 +23,11 @@ class _EarsBase(STSBasedAlgorithm):
 
     def _call_surveillance_algo(self, sts, detection_range):
         control = r.list(
-            range=detection_range, method=self.method, baseline=self.baseline, minSigma=self.min_sigma, alpha=self.alpha
+            range=detection_range,
+            method=self.method,
+            baseline=self.baseline,
+            minSigma=self.min_sigma,
+            alpha=self.alpha,
         )
         surv = surveillance.earsC(sts, control=control)
         return surv
@@ -112,7 +116,11 @@ class EarsC3(_EarsBase):
 
     def _call_surveillance_algo(self, sts, detection_range):
         control = r.list(
-            range=detection_range, method="C3", baseline=self.baseline, minSigma=self.min_sigma, alpha=self.alpha
+            range=detection_range,
+            method="C3",
+            baseline=self.baseline,
+            minSigma=self.min_sigma,
+            alpha=self.alpha,
         )
         surv = surveillance.earsC(sts, control=control)
         return surv

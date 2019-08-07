@@ -6,7 +6,9 @@ import pandas as pd
 
 from .utils import timedelta_weeks
 
-TimeseriesClassificationData = namedtuple("TimeseriesClassificationData", ["train", "test", "train_gen", "test_gen"])
+TimeseriesClassificationData = namedtuple(
+    "TimeseriesClassificationData", ["train", "test", "train_gen", "test_gen"]
+)
 
 
 def salmonella():
@@ -20,7 +22,9 @@ def timeseries_classifcation(
     train: pd.DataFrame, test: pd.DataFrame, offset_in_weeks: int
 ) -> TimeseriesClassificationData:
     """Convert standard timeseries for usage in time series classification."""
-    train_gen, test_gen = timeseries_classifaction_generator(train, test, offset_in_weeks)
+    train_gen, test_gen = timeseries_classifaction_generator(
+        train, test, offset_in_weeks
+    )
     return TimeseriesClassificationData(train, test, train_gen, test_gen)
 
 
@@ -37,7 +41,10 @@ def timeseries_classifaction_generator(
 
 def _load_data(filename: str):
     data = pd.read_csv(
-        os.path.join(os.path.dirname(__file__), filename), index_col=0, parse_dates=True, infer_datetime_format=True
+        os.path.join(os.path.dirname(__file__), filename),
+        index_col=0,
+        parse_dates=True,
+        infer_datetime_format=True,
     )
     data.index.freq = pd.infer_freq(data.index)
     return data

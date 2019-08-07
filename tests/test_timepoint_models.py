@@ -21,7 +21,9 @@ from epysurv.models.timepoint import (
 
 
 def load_predictions(filepath):
-    predictions = pd.read_csv(filepath, index_col=0, parse_dates=True, infer_datetime_format=True)
+    predictions = pd.read_csv(
+        filepath, index_col=0, parse_dates=True, infer_datetime_format=True
+    )
     return predictions
 
 
@@ -52,7 +54,10 @@ def test_prediction(train_data, test_data, shared_datadir, Algo):
 
 
 # These algorithms take to long to be tested every time.
-long_algos_to_test = [HMM, Boda]  # TODO: Boda throws strange error when run in the test.
+long_algos_to_test = [
+    HMM,
+    Boda,
+]  # TODO: Boda throws strange error when run in the test.
 
 
 @pytest.mark.skip

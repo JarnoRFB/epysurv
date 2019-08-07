@@ -38,17 +38,31 @@ def plot_confusion_matrix(
     return ax
 
 
-def plot_prediction(train_data, test_data, prediction, ax: matplotlib.axes.Axes = None) -> matplotlib.axes.Axes:
+def plot_prediction(
+    train_data, test_data, prediction, ax: matplotlib.axes.Axes = None
+) -> matplotlib.axes.Axes:
     """Plots case counts as step line, with outbreaks and alarms indicated by triangles."""
     whole_data = pd.concat((train_data, test_data), sort=False)
     fontsize = 20
     if ax is None:
         fig, ax = plt.subplots(figsize=(12, 8))
-    ax.step(x=whole_data.index, y=whole_data.n_cases, where="mid", color="blue", label="_nolegend_")
+    ax.step(
+        x=whole_data.index,
+        y=whole_data.n_cases,
+        where="mid",
+        color="blue",
+        label="_nolegend_",
+    )
     alarms = prediction.query("alarm == 1")
     ax.plot(alarms.index, [0] * len(alarms), "g^", label="alarm", markersize=12)
     outbreaks = test_data.query("outbreak")
-    ax.plot(outbreaks.index, outbreaks.n_outbreak_cases, "rv", label="outbreak", markersize=12)
+    ax.plot(
+        outbreaks.index,
+        outbreaks.n_outbreak_cases,
+        "rv",
+        label="outbreak",
+        markersize=12,
+    )
     ax.set_xlabel("time", fontsize=fontsize)
     ax.set_ylabel("cases", fontsize=fontsize)
     ax.legend(fontsize="xx-large")
@@ -68,12 +82,16 @@ def ghozzi_score_plot(prediction_result: pd.DataFrame, filename: str):
     """
     # Outbreaks that were recognized.
     prediction_result["weighted_true_positives"] = (
-        prediction_result.alarm * prediction_result.outbreak * prediction_result.n_outbreak_cases
+        prediction_result.alarm
+        * prediction_result.outbreak
+        * prediction_result.n_outbreak_cases
     )
 
     # Outbreaks that were missed.
     prediction_result["weighted_false_negatives"] = (
-        (1 - prediction_result.alarm) * prediction_result.outbreak * prediction_result.n_outbreak_cases
+        (1 - prediction_result.alarm)
+        * prediction_result.outbreak
+        * prediction_result.n_outbreak_cases
     )
     # Alarms that were falsely raised.
     prediction_result["weighted_false_positives"] = (
@@ -86,7 +104,15 @@ def ghozzi_score_plot(prediction_result: pd.DataFrame, filename: str):
         prediction_result.reset_index()
         .rename(columns={"index": "date"})
         .melt(
-            id_vars=["date", "county", "pathogen", "n_cases", "n_outbreak_cases", "outbreak", "alarm"],
+            id_vars=[
+                "date",
+                "county",
+                "pathogen",
+                "n_cases",
+                "n_outbreak_cases",
+                "outbreak",
+                "alarm",
+            ],
             var_name="prediction",
             value_name="weighting",
         )
@@ -94,12 +120,17 @@ def ghozzi_score_plot(prediction_result: pd.DataFrame, filename: str):
 
     case_color = "grey"
     n_cols = 4
-    n_filter_combinations = len(prediction_result[["county", "pathogen"]].drop_duplicates())
+    n_filter_combinations = len(
+        prediction_result[["county", "pathogen"]].drop_duplicates()
+    )
 
     chart = (
         gg.ggplot(melted_prediction_result, gg.aes(x="date"))
         + gg.geom_bar(
-            prediction_result, gg.aes(x="prediction_result.index", y="n_cases"), fill=case_color, stat="identity"
+            prediction_result,
+            gg.aes(x="prediction_result.index", y="n_cases"),
+            fill=case_color,
+            stat="identity",
         )
         + gg.geom_line(gg.aes(y=0), color=case_color)
         + gg.geom_bar(gg.aes(y="weighting", fill="prediction"), stat="identity")
@@ -110,4 +141,10 @@ def ghozzi_score_plot(prediction_result: pd.DataFrame, filename: str):
         + gg.theme(panel_grid_minor=gg.element_blank())
         + gg.theme_light()
     )
-    chart.save(filename, width=5 * n_cols, height=4 * n_filter_combinations / n_cols, unit="cm", limitsize=False)
+    chart.save(
+        filename,
+        width=5 * n_cols,
+        height=4 * n_filter_combinations / n_cols,
+        unit="cm",
+        limitsize=False,
+    )

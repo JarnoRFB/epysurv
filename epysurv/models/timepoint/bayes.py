@@ -5,7 +5,7 @@ from rpy2.robjects.packages import importr
 
 from ._base import STSBasedAlgorithm
 
-surveillance = importr('surveillance')
+surveillance = importr("surveillance")
 
 
 @dataclass
@@ -30,17 +30,20 @@ class Bayes(STSBasedAlgorithm):
         Surveillance Daten, Bachelor’s thesis
     [2] Höhle, M., & Riebler, A. (2005). Höhle, Riebler: The R-Package “surveillance.” Sonderforschungsbereich (Vol. 386). Retrieved from https://epub.ub.uni-muenchen.de/1791/1/paper_422.pdf
     """
+
     years_back: int = 0
     window_half_width: int = 6
     include_recent_year: bool = True
     alpha: float = 0.05
 
     def _call_surveillance_algo(self, sts, detection_range):
-        control = r.list(range=detection_range,
-                         b=self.years_back,
-                         w=self.window_half_width,
-                         actY=self.include_recent_year,
-                         alpha=self.alpha)
+        control = r.list(
+            range=detection_range,
+            b=self.years_back,
+            w=self.window_half_width,
+            actY=self.include_recent_year,
+            alpha=self.alpha,
+        )
 
         surv = surveillance.bayes(sts, control=control)
         return surv

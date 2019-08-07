@@ -67,9 +67,19 @@ class TimepointSurveillanceAlgorithm:
             raise ValueError("The prediction data overlaps with the training data.")
 
 
-offset_to_freq = {offsets.Day: 365, offsets.Week: 52, offsets.MonthBegin: 12, offsets.MonthEnd: 12}
+offset_to_freq = {
+    offsets.Day: 365,
+    offsets.Week: 52,
+    offsets.MonthBegin: 12,
+    offsets.MonthEnd: 12,
+}
 
-offset_to_attr = {offsets.Day: "day", offsets.Week: "week", offsets.MonthBegin: "month", offsets.MonthEnd: "month"}
+offset_to_attr = {
+    offsets.Day: "day",
+    offsets.Week: "week",
+    offsets.MonthBegin: "month",
+    offsets.MonthEnd: "month",
+}
 
 
 def _get_freq(data) -> int:
@@ -110,7 +120,9 @@ class SurveillanceRPackageAlgorithm(TimepointSurveillanceAlgorithm):
         surveillance_result = self._call_surveillance_algo(r_instance, detection_range)
         alarm = self._extract_alarms(surveillance_result)
         predictions = data.copy()
-        predictions["alarm"] = np.append((len(predictions) - len(alarm)) * [np.nan], alarm)
+        predictions["alarm"] = np.append(
+            (len(predictions) - len(alarm)) * [np.nan], alarm
+        )
         predictions = predictions.iloc[-prediction_len:]
         return predictions
 
@@ -136,11 +148,18 @@ class STSBasedAlgorithm(SurveillanceRPackageAlgorithm):
         if data.index.freq is None:
             freq = pd.infer_freq(data.index)
             if freq is None:
-                raise ValueError(f"The time series index has no valid frequency. Index={data.index}")
+                raise ValueError(
+                    f"The time series index has no valid frequency. Index={data.index}"
+                )
             data.index.freq = freq
         sts = surveillance.sts(
             start=r.c(data.index[0].year, _get_start_epoch(data)),
-            epoch=robjects.IntVector([r["as.numeric"](r["as.Date"](d.isoformat()))[0] for d in data.index.date]),
+            epoch=robjects.IntVector(
+                [
+                    r["as.numeric"](r["as.Date"](d.isoformat()))[0]
+                    for d in data.index.date
+                ]
+            ),
             # epoch=data.index,
             freq=_get_freq(data),
             observed=data["n_cases"].values,
@@ -160,4 +179,6 @@ class DisProgBasedAlgorithm(STSBasedAlgorithm):
         return surveillance.sts2disProg(sts)
 
     def _extract_alarms(self, surveillance_result):
-        return np.asarray(dict(zip(surveillance_result.names, list(surveillance_result)))["alarm"])
+        return np.asarray(
+            dict(zip(surveillance_result.names, list(surveillance_result)))["alarm"]
+        )

@@ -36,7 +36,9 @@ def test_data_in_the_future_should_raise():
 def test_fit():
     model = _base.TimepointSurveillanceAlgorithm()
     dates = pd.date_range(start="2011", freq="W-Mon", periods=2)
-    train_data = pd.DataFrame({"n_cases": [5, 6], "n_outbreak_cases": [0, 1]}, index=dates)
+    train_data = pd.DataFrame(
+        {"n_cases": [5, 6], "n_outbreak_cases": [0, 1]}, index=dates
+    )
     train_data_before_fit = train_data.copy()
     model.fit(train_data)
     pd.testing.assert_frame_equal(train_data, train_data_before_fit)

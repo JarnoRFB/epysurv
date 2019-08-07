@@ -41,7 +41,8 @@ def test_test_frequency(tsc_data):
 def test_raises_on_early_start(filter_combination):
     with raises(ValueError, match="The start date"):
         filter_combination.expanding_windows(
-            min_len_in_weeks=104, split_years=SplitYears.from_ts_input("1999", "2009", "2011")
+            min_len_in_weeks=104,
+            split_years=SplitYears.from_ts_input("1999", "2009", "2011"),
         )
 
 
@@ -55,7 +56,8 @@ def test_raises_on_early_start(filter_combination):
 def test_raises_on_high_offset(filter_combination):
     with raises(ValueError, match="The start date plus the offset"):
         filter_combination.expanding_windows(
-            min_len_in_weeks=500, split_years=SplitYears.from_ts_input("2005", "2009", "2011")
+            min_len_in_weeks=500,
+            split_years=SplitYears.from_ts_input("2005", "2009", "2011"),
         )
 
 

@@ -53,7 +53,9 @@ class Cusum(STSBasedAlgorithm):
             range=detection_range,
             k=self.reference_value,
             h=self.decision_boundary,
-            m=robjects.NULL if self.expected_numbers_method == "mean" else self.expected_numbers_method,
+            m=robjects.NULL
+            if self.expected_numbers_method == "mean"
+            else self.expected_numbers_method,
             trans=self.transform,
             alpha=self.negbin_alpha,
         )

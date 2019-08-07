@@ -32,6 +32,11 @@ class CDC(DisProgBasedAlgorithm):
     alpha: float = 0.001
 
     def _call_surveillance_algo(self, sts, detection_range):
-        control = r.list(range=detection_range, b=self.years_back, m=self.window_half_width, alpha=self.alpha)
+        control = r.list(
+            range=detection_range,
+            b=self.years_back,
+            m=self.window_half_width,
+            alpha=self.alpha,
+        )
         surv = surveillance.algo_cdc(sts, control=control)
         return surv

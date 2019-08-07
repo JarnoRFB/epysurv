@@ -22,7 +22,11 @@ def get_outbreak_begins(n: int, outbreak_length: int, n_outbreaks: int) -> Set[i
 
 
 def simulate_outbreaks(
-    n: int = 104, outbreak_length: int = 5, n_outbreaks: int = 3, mu: float = 1, outbreak_mu: float = 10
+    n: int = 104,
+    outbreak_length: int = 5,
+    n_outbreaks: int = 3,
+    mu: float = 1,
+    outbreak_mu: float = 10,
 ) -> pd.DataFrame:
     """Simulate outbreaks based on Poisson distribution.
 
@@ -51,7 +55,9 @@ def simulate_outbreaks(
 
     for start in outbreaks_starts:
         outbreak_cases = stats.poisson.rvs(mu=outbreak_mu, size=outbreak_length)
-        outbreak_cases += outbreak_cases == 0  # Ensure that there is a least on case during the outbreak.
+        outbreak_cases += (
+            outbreak_cases == 0
+        )  # Ensure that there is a least on case during the outbreak.
         n_cases[start : start + outbreak_length] += outbreak_cases
         n_outbreak_cases[start : start + outbreak_length] = outbreak_cases
 
