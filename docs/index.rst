@@ -8,7 +8,7 @@ Welcome to epysurv's documentation!
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Contents
    :glob:
 
    *
