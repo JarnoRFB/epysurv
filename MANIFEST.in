@@ -1,0 +1,2 @@
+include versioneer.py
+include epysurv/_version.py

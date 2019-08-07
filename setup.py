@@ -1,7 +1,10 @@
 from setuptools import setup, find_packages
 import os
 
+import versioneer
+
 package = "epysurv"
+
 
 _here = os.path.abspath(os.path.dirname(__file__))
 
@@ -10,7 +13,8 @@ with open(os.path.join(_here, "README.md"), encoding="utf-8") as f:
 
 setup(
     name=package,
-    version="0.0.3",
+    version=versioneer.get_version(),
+    cmdclass=versioneer.get_cmdclass(),
     description="Epidemiological surveillance in Python.",
     long_description=long_description,
     author="Rüdiger Busche",
@@ -18,7 +22,7 @@ setup(
     url="https://github.com/JarnoRFB/epysurv",
     license="MIT",
     packages=find_packages(exclude=["tests"]),
-    package_data={"epysurv": [os.path.join("data", "*.csv")]},
+    package_data={package: [os.path.join("data", "*.csv")]},
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Science/Research",
