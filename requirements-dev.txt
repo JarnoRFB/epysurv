@@ -6,3 +6,9 @@ pytest-cov
 codecov
 black
 pre-commit
+
+sphinx
+sphinx_rtd_theme
+sphinxcontrib-bibtex
+nbsphinx
+doc8

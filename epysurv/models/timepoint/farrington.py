@@ -44,7 +44,7 @@ class Farrington(DisProgBasedAlgorithm):
 
     References
     ----------
-    [1] Farrington, C.P., Andrews, N.J, Beale A.D. and Catchpole, M.A. (1996): A statistical algorithm for
+    .. [1] Farrington, C.P., Andrews, N.J, Beale A.D. and Catchpole, M.A. (1996): A statistical algorithm for
         the early detection of outbreaks of infectious disease. J. R. Statist. Soc. A, 159, 547-563.
     """
 
@@ -125,12 +125,12 @@ class FarringtonFlexible(STSBasedAlgorithm):
 
     References
     ----------
-    [1] Farrington, C.P., Andrews, N.J, Beale A.D. and Catchpole, M.A. (1996): A statistical algorithm for
+    .. [1] Farrington, C.P., Andrews, N.J, Beale A.D. and Catchpole, M.A. (1996): A statistical algorithm for
         the early detection of outbreaks of infectious disease. J. R. Statist. Soc. A, 159, 547-563.
-    [2] Noufaily, A., Enki, D.G., Farrington, C.P., Garthwaite, P., Andrews, N.J., Charlett, A. (2012): An
+    .. [2] Noufaily, A., Enki, D.G., Farrington, C.P., Garthwaite, P., Andrews, N.J., Charlett, A. (2012): An
         improved algorithm for outbreak detection in multiple surveillance systems. Statistics in Medicine,
         32 (7), 1206-1222.
-    [3] Salmon, M., Schumacher, D. and Höhle, M. (2016): Monitoring count time series in R: Aberration
+    .. [3] Salmon, M., Schumacher, D. and Höhle, M. (2016): Monitoring count time series in R: Aberration
         detection in public health surveillance. Journal of Statistical Software, 70 (10), 1-35. doi: 10.18637/jss.v070.i10
     """
 

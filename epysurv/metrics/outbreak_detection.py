@@ -15,8 +15,8 @@ def ghozzi_score(prediction_result: pd.DataFrame) -> float:
         Dataframe containing the columns "alarm", "outbreak" and "outbreak_cases"
 
     Returns
-    -------
-    A maximum score of 1.
+    -------    
+    A maximum score of 1 2.
     """
     # Outbreaks that were correctly predicted.
     weighted_true_positives = np.sum(

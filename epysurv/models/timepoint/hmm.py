@@ -33,8 +33,8 @@ class HMM(DisProgBasedAlgorithm):
 
     References
     ----------
-    [1] Y. Le Strat and F. Carrat, Monitoring Epidemiologic Surveillance Data using Hidden Markov Models (1999), Statistics in Medicine, 18, 3463–3478
-    [2] I.L. MacDonald and W. Zucchini, Hidden Markov and Other Models for Discrete-valued Time
+    .. [1] Y. Le Strat and F. Carrat, Monitoring Epidemiologic Surveillance Data using Hidden Markov Models (1999), Statistics in Medicine, 18, 3463–3478
+    .. [2] I.L. MacDonald and W. Zucchini, Hidden Markov and Other Models for Discrete-valued Time
         Series, (1997), Chapman & Hall, Monographs on Statistics and applied Probability 70
     """
 
