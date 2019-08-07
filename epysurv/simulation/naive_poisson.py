@@ -1,7 +1,8 @@
-from typing import Set
 import random
-import pandas as pd
+from typing import Set
+
 import numpy as np
+import pandas as pd
 from scipy import stats
 
 
@@ -20,8 +21,13 @@ def get_outbreak_begins(n: int, outbreak_length: int, n_outbreaks: int) -> Set[i
     return outbreaks_starts
 
 
-def simulate_outbreaks(n: int = 104, outbreak_length: int = 5, n_outbreaks: int = 3, mu: float = 1,
-                       outbreak_mu: float = 10) -> pd.DataFrame:
+def simulate_outbreaks(
+    n: int = 104,
+    outbreak_length: int = 5,
+    n_outbreaks: int = 3,
+    mu: float = 1,
+    outbreak_mu: float = 10,
+) -> pd.DataFrame:
     """Simulate outbreaks based on Poisson distribution.
 
     Parameters
@@ -49,15 +55,21 @@ def simulate_outbreaks(n: int = 104, outbreak_length: int = 5, n_outbreaks: int 
 
     for start in outbreaks_starts:
         outbreak_cases = stats.poisson.rvs(mu=outbreak_mu, size=outbreak_length)
-        outbreak_cases += (outbreak_cases == 0)  # Ensure that there is a least on case during the outbreak.
-        n_cases[start: start + outbreak_length] += outbreak_cases
-        n_outbreak_cases[start: start + outbreak_length] = outbreak_cases
+        outbreak_cases += (
+            outbreak_cases == 0
+        )  # Ensure that there is a least on case during the outbreak.
+        n_cases[start : start + outbreak_length] += outbreak_cases
+        n_outbreak_cases[start : start + outbreak_length] = outbreak_cases
 
-    data = pd.DataFrame({'n_cases': n_cases,
-                         'n_outbreak_cases': n_outbreak_cases,
-                         'outbreak': n_outbreak_cases > 0,
-                         'baseline': baseline,
-                         }, index=pd.date_range(start='2020', periods=baseline.size, freq='W-MON'))
+    data = pd.DataFrame(
+        {
+            "n_cases": n_cases,
+            "n_outbreak_cases": n_outbreak_cases,
+            "outbreak": n_outbreak_cases > 0,
+            "baseline": baseline,
+        },
+        index=pd.date_range(start="2020", periods=baseline.size, freq="W-MON"),
+    )
 
-    data.index.name = 'date'
+    data.index.name = "date"
     return data

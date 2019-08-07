@@ -4,3 +4,5 @@ pytest-datadir
 pytest-mypy
 pytest-cov
 codecov
+black
+pre-commit

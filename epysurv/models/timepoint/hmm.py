@@ -1,10 +1,11 @@
 from dataclasses import dataclass
+
 from rpy2.robjects import r
 from rpy2.robjects.packages import importr
 
 from ._base import DisProgBasedAlgorithm
 
-surveillance = importr('surveillance')
+surveillance = importr("surveillance")
 
 
 @dataclass
@@ -36,6 +37,7 @@ class HMM(DisProgBasedAlgorithm):
     [2] I.L. MacDonald and W. Zucchini, Hidden Markov and Other Models for Discrete-valued Time
         Series, (1997), Chapman & Hall, Monographs on Statistics and applied Probability 70
     """
+
     n_observations: int = -1
     n_hidden_states: int = 2
     trend: bool = True
@@ -43,11 +45,13 @@ class HMM(DisProgBasedAlgorithm):
     equal_covariate_effects: bool = False
 
     def _call_surveillance_algo(self, disprog_obj, detection_range):
-        control = r.list(range=detection_range,
-                         Mtilde=self.n_observations,
-                         noStates=self.n_hidden_states,
-                         trend=self.trend,
-                         noHarmonics=self.n_harmonics,
-                         covEffectEqual=self.equal_covariate_effects)
+        control = r.list(
+            range=detection_range,
+            Mtilde=self.n_observations,
+            noStates=self.n_hidden_states,
+            trend=self.trend,
+            noHarmonics=self.n_harmonics,
+            covEffectEqual=self.equal_covariate_effects,
+        )
         surv = surveillance.algo_hmm(disprog_obj, control=control)
         return surv

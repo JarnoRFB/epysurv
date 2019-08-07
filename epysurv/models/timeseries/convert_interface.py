@@ -7,10 +7,11 @@ __all__ = []
 for name, obj in vars(timepoint).items():
     try:
         if issubclass(obj, timepoint._base.TimepointSurveillanceAlgorithm):
-            globals()[name] = type(name, (NonLearningTimeseriesClassificationMixin, obj), {})
+            globals()[name] = type(
+                name, (NonLearningTimeseriesClassificationMixin, obj), {}
+            )
             __all__.append(name)
     except TypeError:
         continue
 
 # print(__all__)
-

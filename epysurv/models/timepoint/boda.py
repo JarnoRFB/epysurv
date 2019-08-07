@@ -1,14 +1,14 @@
-from dataclasses import dataclass
 import warnings
+from dataclasses import dataclass
 
 from rpy2 import robjects
+from rpy2.rinterface import RRuntimeError
 from rpy2.robjects import r
 from rpy2.robjects.packages import importr
-from rpy2.rinterface import RRuntimeError
+
 from ._base import STSBasedAlgorithm
 
-
-surveillance = importr('surveillance')
+surveillance = importr("surveillance")
 
 
 @dataclass
@@ -40,33 +40,38 @@ class Boda(STSBasedAlgorithm):
         of the parameters and then compute the quantile of the mixture distribution
         using bisectioning, which is faster.
     """
+
     trend: bool = False
     season: bool = False
-    prior: str = 'iid'
+    prior: str = "iid"
     alpha: float = 0.05
     mc_munu: int = 100
     mc_y: int = 10
-    sampling_method = 'joint'
-    quantile_method: str = 'MM'
+    sampling_method = "joint"
+    quantile_method: str = "MM"
 
     def _call_surveillance_algo(self, sts, detection_range):
         try:
-            importr('INLA')
+            importr("INLA")
         except RRuntimeError:
             raise ImportError(
-                'For the Boda algortihm to run you need the INLA package (http://www.r-inla.org/). '
+                "For the Boda algortihm to run you need the INLA package (http://www.r-inla.org/). "
                 'Install it by running install.packages("INLA", repos = c(getOption("repos"), INLA = "https://inla.r-inla-download.org/R/stable"), dep = TRUE) '
-                'in the R console.'
+                "in the R console."
             )
-        control = r.list(**{'range': detection_range,
-                            'X': robjects.NULL,
-                            'trend': self.trend,
-                            'season': self.season,
-                            'prior': self.prior,
-                            'alpha': self.alpha,
-                            'mc.munu': self.mc_munu,
-                            'mc.y': self.mc_y,
-                            'samplingMethod': self.sampling_method,
-                            'quantileMethod': self.quantile_method})
+        control = r.list(
+            **{
+                "range": detection_range,
+                "X": robjects.NULL,
+                "trend": self.trend,
+                "season": self.season,
+                "prior": self.prior,
+                "alpha": self.alpha,
+                "mc.munu": self.mc_munu,
+                "mc.y": self.mc_y,
+                "samplingMethod": self.sampling_method,
+                "quantileMethod": self.quantile_method,
+            }
+        )
         surv = surveillance.boda(sts, control=control)
         return surv
