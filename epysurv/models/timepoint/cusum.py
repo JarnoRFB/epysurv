@@ -34,11 +34,12 @@ class Cusum(STSBasedAlgorithm):
         - anscombeNegBin anscombe residuals for NegBin – experimental
         - ``"none"`` no transformation
     negbin_alpha
-        Parameter of the negative binomial distribution, such that the variance is m + α ∗ m2.
+        Parameter of the negative binomial distribution, such that the variance is :math:`m + α \cdot m2`.
+    
     References
     ----------
-    [1] G. Rossi, L. Lampugnani and M. Marchi (1999), An approximate CUSUM procedure for surveillance of health events, Statistics in Medicine, 18, 2111–2122
-    [2] D. A. Pierce and D. W. Schafer (1986), Residuals in Generalized Linear Models, Journal of the
+    .. [1] G. Rossi, L. Lampugnani and M. Marchi (1999), An approximate CUSUM procedure for surveillance of health events, Statistics in Medicine, 18, 2111–2122
+    .. [2] D. A. Pierce and D. W. Schafer (1986), Residuals in Generalized Linear Models, Journal of the
         American Statistical Association, 81, 977–986
     """
 

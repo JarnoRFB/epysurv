@@ -26,9 +26,9 @@ class Bayes(STSBasedAlgorithm):
 
     References
     ----------
-    [1] Riebler, A. (2004), Empirischer Vergleich von statistischen Methoden zur Ausbruchserkennung bei
+    .. [1] Riebler, A. (2004), Empirischer Vergleich von statistischen Methoden zur Ausbruchserkennung bei
         Surveillance Daten, Bachelor’s thesis
-    [2] Höhle, M., & Riebler, A. (2005). Höhle, Riebler: The R-Package “surveillance.” Sonderforschungsbereich (Vol. 386). Retrieved from https://epub.ub.uni-muenchen.de/1791/1/paper_422.pdf
+    .. [2] Höhle, M., & Riebler, A. (2005). Höhle, Riebler: The R-Package “surveillance.” Sonderforschungsbereich (Vol. 386). Retrieved from https://epub.ub.uni-muenchen.de/1791/1/paper_422.pdf
     """
 
     years_back: int = 0

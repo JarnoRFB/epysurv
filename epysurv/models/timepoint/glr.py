@@ -52,9 +52,9 @@ class GLRNegativeBinomial(STSBasedAlgorithm):
 
     References
     ----------
-    [1] Höhle, M. and Paul, M. (2008): Count data regression charts for the monitoring of surveillance time
+    .. [1] Höhle, M. and Paul, M. (2008): Count data regression charts for the monitoring of surveillance time
         series. Computational Statistics and Data Analysis, 52 (9), 4357-4368.
-    [2] Salmon, M., Schumacher, D. and Höhle, M. (2016): Monitoring count time series in R: Aberration
+    .. [2] Salmon, M., Schumacher, D. and Höhle, M. (2016): Monitoring count time series in R: Aberration
         detection in public health surveillance. Journal of Statistical Software, 70 (10), 1-35.
         doi: 10.18637/jss.v070.i10
     """
@@ -114,9 +114,9 @@ class GLRPoisson(STSBasedAlgorithm):
         to produce an alarm or with "value" the GLR-statistic is computed.
     References
     ----------
-    [1] Höhle, M. and Paul, M. (2008): Count data regression charts for the monitoring of surveillance time
+    .. [1] Höhle, M. and Paul, M. (2008): Count data regression charts for the monitoring of surveillance time
         series. Computational Statistics and Data Analysis, 52 (9), 4357-4368.
-    [2] Salmon, M., Schumacher, D. and Höhle, M. (2016): Monitoring count time series in R: Aberration
+    .. [2] Salmon, M., Schumacher, D. and Höhle, M. (2016): Monitoring count time series in R: Aberration
         detection in public health surveillance. Journal of Statistical Software, 70 (10), 1-35.
         doi: 10.18637/jss.v070.i10
     """

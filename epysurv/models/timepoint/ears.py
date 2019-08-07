@@ -51,9 +51,9 @@ class EarsC1(_EarsBase):
 
     References
     ----------
-    [1] Fricker, R.D., Hegler, B.L, and Dunfee, D.A. (2008). Comparing syndromic surveillance detection
+    .. [1] Fricker, R.D., Hegler, B.L, and Dunfee, D.A. (2008). Comparing syndromic surveillance detection
         methods: EARS versus a CUSUM-based methodology, 27:3407-3429, Statistics in medicine.
-    [2] Salmon, M., Schumacher, D. and Höhle, M. (2016): Monitoring count time series in R: Aberration
+    .. [2] Salmon, M., Schumacher, D. and Höhle, M. (2016): Monitoring count time series in R: Aberration
         detection in public health surveillance. Journal of Statistical Software, 70 (10), 1-35. doi: 10.18637/jss.v070.i10
     """
 
@@ -78,9 +78,9 @@ class EarsC2(_EarsBase):
 
     References
     ----------
-    [1] Fricker, R.D., Hegler, B.L, and Dunfee, D.A. (2008). Comparing syndromic surveillance detection
+    .. [1] Fricker, R.D., Hegler, B.L, and Dunfee, D.A. (2008). Comparing syndromic surveillance detection
         methods: EARS versus a CUSUM-based methodology, 27:3407-3429, Statistics in medicine.
-    [2] Salmon, M., Schumacher, D. and Höhle, M. (2016): Monitoring count time series in R: Aberration
+    .. [2] Salmon, M., Schumacher, D. and Höhle, M. (2016): Monitoring count time series in R: Aberration
         detection in public health surveillance. Journal of Statistical Software, 70 (10), 1-35. doi: 10.18637/jss.v070.i10
     """
 
@@ -105,9 +105,9 @@ class EarsC3(_EarsBase):
 
     References
     ----------
-    [1] Fricker, R.D., Hegler, B.L, and Dunfee, D.A. (2008). Comparing syndromic surveillance detection
+    .. [1] Fricker, R.D., Hegler, B.L, and Dunfee, D.A. (2008). Comparing syndromic surveillance detection
         methods: EARS versus a CUSUM-based methodology, 27:3407-3429, Statistics in medicine.
-    [2] Salmon, M., Schumacher, D. and Höhle, M. (2016): Monitoring count time series in R: Aberration
+    .. [2] Salmon, M., Schumacher, D. and Höhle, M. (2016): Monitoring count time series in R: Aberration
         detection in public health surveillance. Journal of Statistical Software, 70 (10), 1-35. doi: 10.18637/jss.v070.i10
     """
 

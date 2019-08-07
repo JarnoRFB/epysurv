@@ -21,9 +21,9 @@ class CDC(DisProgBasedAlgorithm):
         An approximate (two-sided)(1 − α) prediction interval is calculated.
     References
     ----------
-    [1] Stroup, D., G. Williamson, J. Herndon, and J. Karon (1989). Detection of aberrations in the occurence of
+    .. [1] Stroup, D., G. Williamson, J. Herndon, and J. Karon (1989). Detection of aberrations in the occurence of
         notifiable diseases surveillance data. Statistics in Medicine 8, 323-329.
-    [2] Farrington, C. and N. Andrews (2003). Monitoring the Health of Populations, Chapter Outbreak
+    .. [2] Farrington, C. and N. Andrews (2003). Monitoring the Health of Populations, Chapter Outbreak
         Detection: Application to Infectious Disease Surveillance, pp. 203-231. Oxford University Press.
     """
 
