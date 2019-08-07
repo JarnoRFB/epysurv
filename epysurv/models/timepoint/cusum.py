@@ -1,5 +1,6 @@
 from typing import *
 from dataclasses import dataclass
+from rpy2 import robjects
 from rpy2.robjects import r
 from rpy2.robjects.packages import importr
 
@@ -16,7 +17,12 @@ class Cusum(STSBasedAlgorithm):
     reference_value
     decision_boundary
     expected_numbers_method
-        How to determine the expected number of cases – the following arguments are possible: {"glm", None}.
+        How to determine the expected number of cases – the following arguments are possible: {"glm", "mean"}.
+
+        ``mean``
+            Use the mean of all data points passed to ``fit``.
+        ``glm``
+            Fit a glm to the data ponts passed to ``fit``.
     transform
         One of the following transformations (warning: Anscombe and NegBin transformations are experimental)
         - standard standardized variables z1 (based on asymptotic normality) - This is the default.
@@ -36,16 +42,16 @@ class Cusum(STSBasedAlgorithm):
     """
     reference_value: float = 1.04
     decision_boundary: float = 2.26
-    expected_numbers_method: Optional[str] = None
+    expected_numbers_method: str = "mean"
     transform: str = 'standard'
-    negbin_alpha: float = 0.0
+    negbin_alpha: float = 0.1
 
     def _call_surveillance_algo(self, sts, detection_range):
         control = r.list(range=detection_range,
                          k=self.reference_value,
                          h=self.decision_boundary,
-                         m=self._None_to_NULL(self.expected_numbers_method),
+                         m=robjects.NULL if self.expected_numbers_method == "mean" else self.expected_numbers_method,
                          trans=self.transform,
-                         alpha=self._None_to_NULL(self.negbin_alpha))
+                         alpha=self.negbin_alpha)
         surv = surveillance.cusum(sts, control=control)
         return surv

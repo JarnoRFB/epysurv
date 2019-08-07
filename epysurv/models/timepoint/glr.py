@@ -5,7 +5,7 @@ from rpy2 import robjects
 
 from rpy2.robjects import r
 from rpy2.robjects.packages import importr
-from typing import List
+from typing import Tuple, Union
 
 from ._base import STSBasedAlgorithm
 
@@ -39,9 +39,9 @@ class GLRNegativeBinomial(STSBasedAlgorithm):
         A string specifying the type of the alternative. The two choices are "intercept" and "epi".
     direction
         Specifying the direction of testing in GLR scheme.
-        - ["inc"] only increases in x are considered in the GLR-statistic
-        - ["dec"] only decreases are regarded
-        - ["inc", "dec"] both increases and decreases are regarded.
+        - ("inc",) only increases in x are considered in the GLR-statistic
+        - ("dec",) only decreases are regarded
+        - ("inc", "dec") both increases and decreases are regarded.
     upperbound_statistic
         a string specifying the type of upperbound-statistic that is returned.
         With "cases" the number of cases that would have been necessary
@@ -62,7 +62,7 @@ class GLRNegativeBinomial(STSBasedAlgorithm):
     glr_test_threshold: int = 5
     m: int = -1
     change: str = 'intercept'
-    direction: list = field(default_factory=lambda: ['inc', 'dec'])
+    direction: Union[Tuple[str, str], Tuple[str]] = ('inc', 'dec')
     upperbound_statistic: str = 'cases'
     x_max: float = 1e4
 
@@ -101,9 +101,9 @@ class GLRPoisson(STSBasedAlgorithm):
         A string specifying the type of the alternative. The two choices are "intercept" and "epi".
     direction
         Specifying the direction of testing in GLR scheme.
-        - ["inc"] only increases in x are considered in the GLR-statistic
-        - ["dec"] only decreases are regarded
-        - ["inc", "dec"] both increases and decreases are regarded.
+        - ("inc",) only increases in x are considered in the GLR-statistic
+        - ("dec",) only decreases are regarded
+        - ("inc", "dec") both increases and decreases are regarded.
     upperbound_statistic
         a string specifying the type of upperbound-statistic that is returned.
         With "cases" the number of cases that would have been necessary
@@ -122,7 +122,7 @@ class GLRPoisson(STSBasedAlgorithm):
     """number of time instances back in time in the window-limited approach, i.e. the last value considered is max 1, n − M. To always look back until the first observation use M=-1."""
     change: str = 'intercept'
     """a string specifying the type of the alternative. Currently the two choices are intercept and epi. See the SFB Discussion Paper 500 for details"""
-    direction: List[str] = field(default_factory=lambda: ['inc', 'dec'])
+    direction: Union[Tuple[str, str], Tuple[str]] = ('inc', 'dec')
     """Specifying the direction of testing in GLR scheme. With "inc" only increases in x are considered in the GLR-statistic, with "dec" decreases are regarded."""
     upperbound_statistic: str = 'cases'
     """a string specifying the type of upperbound-statistic that is returned. With "cases" the number of cases that would have been necessary to produce an alarm or with "value" the GLR-statistic is computed (see below)"""
