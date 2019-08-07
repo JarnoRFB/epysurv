@@ -6,7 +6,7 @@ from rpy2.robjects.packages import importr
 
 from ._base import STSBasedAlgorithm
 
-surveillance = importr('surveillance')
+surveillance = importr("surveillance")
 
 
 @dataclass
@@ -14,6 +14,7 @@ class _EarsBase(STSBasedAlgorithm):
     """
     Base class for the Ears models.
     """
+
     alpha: float = 0.001
     baseline: int = 7
     min_sigma: float = 0
@@ -21,11 +22,9 @@ class _EarsBase(STSBasedAlgorithm):
     method: ClassVar = None
 
     def _call_surveillance_algo(self, sts, detection_range):
-        control = r.list(range=detection_range,
-                         method=self.method,
-                         baseline=self.baseline,
-                         minSigma=self.min_sigma,
-                         alpha=self.alpha)
+        control = r.list(
+            range=detection_range, method=self.method, baseline=self.baseline, minSigma=self.min_sigma, alpha=self.alpha
+        )
         surv = surveillance.earsC(sts, control=control)
         return surv
 
@@ -53,7 +52,8 @@ class EarsC1(_EarsBase):
     [2] Salmon, M., Schumacher, D. and Höhle, M. (2016): Monitoring count time series in R: Aberration
         detection in public health surveillance. Journal of Statistical Software, 70 (10), 1-35. doi: 10.18637/jss.v070.i10
     """
-    method = 'C1'
+
+    method = "C1"
 
 
 class EarsC2(_EarsBase):
@@ -79,7 +79,8 @@ class EarsC2(_EarsBase):
     [2] Salmon, M., Schumacher, D. and Höhle, M. (2016): Monitoring count time series in R: Aberration
         detection in public health surveillance. Journal of Statistical Software, 70 (10), 1-35. doi: 10.18637/jss.v070.i10
     """
-    method = 'C2'
+
+    method = "C2"
 
 
 @dataclass
@@ -105,14 +106,13 @@ class EarsC3(_EarsBase):
     [2] Salmon, M., Schumacher, D. and Höhle, M. (2016): Monitoring count time series in R: Aberration
         detection in public health surveillance. Journal of Statistical Software, 70 (10), 1-35. doi: 10.18637/jss.v070.i10
     """
+
     alpha: float = 0.001
     baseline: int = 7
 
     def _call_surveillance_algo(self, sts, detection_range):
-        control = r.list(range=detection_range,
-                         method="C3",
-                         baseline=self.baseline,
-                         minSigma=self.min_sigma,
-                         alpha=self.alpha)
+        control = r.list(
+            range=detection_range, method="C3", baseline=self.baseline, minSigma=self.min_sigma, alpha=self.alpha
+        )
         surv = surveillance.earsC(sts, control=control)
         return surv

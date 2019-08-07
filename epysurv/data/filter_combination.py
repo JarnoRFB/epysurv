@@ -1,7 +1,8 @@
-import pandas as pd
-from typing import *
-from dataclasses import dataclass, field
 from collections import namedtuple
+from dataclasses import dataclass, field
+from typing import *
+
+import pandas as pd
 
 from .utils import timedelta_weeks
 
@@ -11,9 +12,10 @@ class SplitYears:
 
     start to middle is the training data. middle to end is the test data.
     """
+
     def __init__(self, start: pd.Timestamp, middle: pd.Timestamp, end: pd.Timestamp):
         if not (start < middle < end):
-            raise ValueError('start, middle and end must be consecutive.')
+            raise ValueError("start, middle and end must be consecutive.")
         self.start = start
         self.middle = middle
         self.end = end
@@ -27,10 +29,11 @@ class SplitYears:
         return cls(start, middle, end)
 
 
-TimeseriesClassificationData = namedtuple('TimeseriesClassificationData',
-                                          ['train_final', 'test_final', 'train_gen', 'test_gen'])
+TimeseriesClassificationData = namedtuple(
+    "TimeseriesClassificationData", ["train_final", "test_final", "train_gen", "test_gen"]
+)
 
-FREQ = 'W-MON'
+FREQ = "W-MON"
 
 
 @dataclass
@@ -48,6 +51,7 @@ class FilterCombination:
     data
         The case records.
     """
+
     disease: str
     county: str
     pathogen: str
@@ -68,32 +72,30 @@ class FilterCombination:
         """
         self._validate_input(min_len_in_weeks, split_years)
 
-        train_data = self.data.query('@split_years.start <= ReportingDate < @split_years.middle')
-        test_data = self.data.query('@split_years.start <= ReportingDate < @split_years.end')
+        train_data = self.data.query("@split_years.start <= ReportingDate < @split_years.middle")
+        test_data = self.data.query("@split_years.start <= ReportingDate < @split_years.end")
 
         offset = split_years.start + timedelta_weeks(min_len_in_weeks)
 
-        true_train = (pd.DataFrame(index=pd.date_range(offset, split_years.middle, freq=FREQ, closed='left'))
-                      .join(_to_recent_timeseries(train_data))
-                      .fillna(0)
-                      .assign(outbreak=lambda df: df.n_outbreak_cases > 0))
-        true_test = (pd.DataFrame(index=pd.date_range(split_years.middle, split_years.end, freq=FREQ, closed='left'))
-                     .join(_to_recent_timeseries(
-            self.data.query('@split_years.middle <= ReportingDate < @split_years.end')))
-                     .fillna(0)
-                     .assign(outbreak=lambda df: df.n_outbreak_cases > 0))
+        true_train = (
+            pd.DataFrame(index=pd.date_range(offset, split_years.middle, freq=FREQ, closed="left"))
+            .join(_to_recent_timeseries(train_data))
+            .fillna(0)
+            .assign(outbreak=lambda df: df.n_outbreak_cases > 0)
+        )
+        true_test = (
+            pd.DataFrame(index=pd.date_range(split_years.middle, split_years.end, freq=FREQ, closed="left"))
+            .join(_to_recent_timeseries(self.data.query("@split_years.middle <= ReportingDate < @split_years.end")))
+            .fillna(0)
+            .assign(outbreak=lambda df: df.n_outbreak_cases > 0)
+        )
 
-        train_gen = self._expanding_frame(train_data,
-                                          true_train,
-                                          offset=offset,
-                                          start=split_years.start,
-                                          end=split_years.middle)
-        test_gen = self._expanding_frame(test_data,
-                                         true_test,
-                                         offset=split_years.middle,
-                                         start=split_years.start,
-                                         end=split_years.end)
-
+        train_gen = self._expanding_frame(
+            train_data, true_train, offset=offset, start=split_years.start, end=split_years.middle
+        )
+        test_gen = self._expanding_frame(
+            test_data, true_test, offset=split_years.middle, start=split_years.start, end=split_years.end
+        )
 
         return TimeseriesClassificationData(true_train, true_test, train_gen, test_gen)
 
@@ -103,21 +105,26 @@ class FilterCombination:
         # if self.data.ReportingDate.max() < split_years.end:
         #     raise ValueError(f'The end date must be before the last case, but is {split_years.end}')
         if split_years.start < self.data.ReportingDate.min():
-            raise ValueError(f'The start date must be after the first case, but is {split_years.start}')
+            raise ValueError(f"The start date must be after the first case, but is {split_years.start}")
         if split_years.middle < split_years.start + timedelta_weeks(min_len_in_weeks):
-            raise ValueError(f'The start date plus the offset must be before the middle date, '
-                             f'but is {split_years.start + timedelta_weeks(min_len_in_weeks)}')
+            raise ValueError(
+                f"The start date plus the offset must be before the middle date, "
+                f"but is {split_years.start + timedelta_weeks(min_len_in_weeks)}"
+            )
 
-    def _expanding_frame(self, data: pd.DataFrame, final_data: pd.DataFrame, offset: pd.Timestamp, start: pd.Timestamp, end: pd.Timestamp):
-        for date in pd.date_range(offset, end, freq=FREQ, closed='left'):
-            ts = (data
-                  # .copy()
-                  .query('ValidFrom <= @date & (ValidUntil > @date | @pd.isna(ValidUntil))')
-                  .set_index('ReportingDate')
-                  .groupby(pd.Grouper(freq=FREQ))
-                  .agg({'IdRecord': 'count', 'IdRecordAusbruchOut': 'count'})
-                  .rename(columns={'IdRecord': 'n_cases', 'IdRecordAusbruchOut': 'n_outbreak_cases'})
-                  )
+    def _expanding_frame(
+        self, data: pd.DataFrame, final_data: pd.DataFrame, offset: pd.Timestamp, start: pd.Timestamp, end: pd.Timestamp
+    ):
+        for date in pd.date_range(offset, end, freq=FREQ, closed="left"):
+            ts = (
+                data
+                # .copy()
+                .query("ValidFrom <= @date & (ValidUntil > @date | @pd.isna(ValidUntil))")
+                .set_index("ReportingDate")
+                .groupby(pd.Grouper(freq=FREQ))
+                .agg({"IdRecord": "count", "IdRecordAusbruchOut": "count"})
+                .rename(columns={"IdRecord": "n_cases", "IdRecordAusbruchOut": "n_outbreak_cases"})
+            )
             ts = pd.DataFrame(index=pd.date_range(start, date, freq=FREQ)).join(ts).fillna(0)
             outbreak = final_data.loc[date].outbreak
             yield ts, outbreak
@@ -125,10 +132,10 @@ class FilterCombination:
 
 def _to_recent_timeseries(data: pd.DataFrame) -> pd.DataFrame:
     """Get a time series from case data, that represents the most recent state."""
-    return (data
-            .query('IsCurrent')
-            .set_index('ReportingDate')
-            .groupby(pd.Grouper(freq=FREQ))
-            .agg({'IdRecord': 'count', 'IdRecordAusbruchOut': 'count'})
-            .rename(columns={'IdRecord': 'n_cases', 'IdRecordAusbruchOut': 'n_outbreak_cases'})
-            )
+    return (
+        data.query("IsCurrent")
+        .set_index("ReportingDate")
+        .groupby(pd.Grouper(freq=FREQ))
+        .agg({"IdRecord": "count", "IdRecordAusbruchOut": "count"})
+        .rename(columns={"IdRecord": "n_cases", "IdRecordAusbruchOut": "n_outbreak_cases"})
+    )

@@ -1,15 +1,15 @@
 """Count data regression charts for the monitoring of surveillance time series as proposed by Höhle
 and Paul (2008). The implementation is described in Salmon et al. (2016)."""
 from dataclasses import dataclass, field
-from rpy2 import robjects
+from typing import Tuple, Union
 
+from rpy2 import robjects
 from rpy2.robjects import r
 from rpy2.robjects.packages import importr
-from typing import Tuple, Union
 
 from ._base import STSBasedAlgorithm
 
-surveillance = importr('surveillance')
+surveillance = importr("surveillance")
 
 
 @dataclass
@@ -58,28 +58,32 @@ class GLRNegativeBinomial(STSBasedAlgorithm):
         detection in public health surveillance. Journal of Statistical Software, 70 (10), 1-35.
         doi: 10.18637/jss.v070.i10
     """
+
     alpha: float = 0
     glr_test_threshold: int = 5
     m: int = -1
-    change: str = 'intercept'
-    direction: Union[Tuple[str, str], Tuple[str]] = ('inc', 'dec')
-    upperbound_statistic: str = 'cases'
+    change: str = "intercept"
+    direction: Union[Tuple[str, str], Tuple[str]] = ("inc", "dec")
+    upperbound_statistic: str = "cases"
     x_max: float = 1e4
 
     def _call_surveillance_algo(self, sts, detection_range):
-        control = r.list(**{'range': detection_range,
-                            'c.ARL': self.glr_test_threshold,
-                            'm0': robjects.NULL,
-                            'alpha': self.alpha,
-                            # Mtilde is set to 1, since that is the only valid value for "epi" and "intercept"
-                            'Mtilde': 1,
-                            'M': self.m,
-                            'change': self.change,
-                            'theta': robjects.NULL,
-                            'dir': r.c(*self.direction),
-                            'ret': self.upperbound_statistic,
-                            'xMax': self.x_max
-                            })
+        control = r.list(
+            **{
+                "range": detection_range,
+                "c.ARL": self.glr_test_threshold,
+                "m0": robjects.NULL,
+                "alpha": self.alpha,
+                # Mtilde is set to 1, since that is the only valid value for "epi" and "intercept"
+                "Mtilde": 1,
+                "M": self.m,
+                "change": self.change,
+                "theta": robjects.NULL,
+                "dir": r.c(*self.direction),
+                "ret": self.upperbound_statistic,
+                "xMax": self.x_max,
+            }
+        )
 
         surv = surveillance.glrnb(sts, control=control)
         return surv
@@ -116,30 +120,34 @@ class GLRPoisson(STSBasedAlgorithm):
         detection in public health surveillance. Journal of Statistical Software, 70 (10), 1-35.
         doi: 10.18637/jss.v070.i10
     """
+
     glr_test_threshold: int = 5
     """threshold in the GLR test, i.e. cγ."""
     m: int = -1
     """number of time instances back in time in the window-limited approach, i.e. the last value considered is max 1, n − M. To always look back until the first observation use M=-1."""
-    change: str = 'intercept'
+    change: str = "intercept"
     """a string specifying the type of the alternative. Currently the two choices are intercept and epi. See the SFB Discussion Paper 500 for details"""
-    direction: Union[Tuple[str, str], Tuple[str]] = ('inc', 'dec')
+    direction: Union[Tuple[str, str], Tuple[str]] = ("inc", "dec")
     """Specifying the direction of testing in GLR scheme. With "inc" only increases in x are considered in the GLR-statistic, with "dec" decreases are regarded."""
-    upperbound_statistic: str = 'cases'
+    upperbound_statistic: str = "cases"
     """a string specifying the type of upperbound-statistic that is returned. With "cases" the number of cases that would have been necessary to produce an alarm or with "value" the GLR-statistic is computed (see below)"""
 
     def _call_surveillance_algo(self, sts, detection_range):
-        control = r.list(**{'range': detection_range,
-                            'c.ARL': self.glr_test_threshold,
-                            'm0': robjects.NULL,
-                            # Mtilde is set to 1, since that is the only valid value for "epi" and "intercept"
-                            'Mtilde': 1,
-                            'M': self.m,
-                            'change': self.change,
-                            # Role of theta: If NULL then the GLR scheme is used. If not NULL the prespecified value for κ or λ is used in a recursive LR scheme, which is faster."""
-                            'theta': robjects.NULL,
-                            'dir': r.c(*self.direction),
-                            'ret': self.upperbound_statistic,
-                            })
+        control = r.list(
+            **{
+                "range": detection_range,
+                "c.ARL": self.glr_test_threshold,
+                "m0": robjects.NULL,
+                # Mtilde is set to 1, since that is the only valid value for "epi" and "intercept"
+                "Mtilde": 1,
+                "M": self.m,
+                "change": self.change,
+                # Role of theta: If NULL then the GLR scheme is used. If not NULL the prespecified value for κ or λ is used in a recursive LR scheme, which is faster."""
+                "theta": robjects.NULL,
+                "dir": r.c(*self.direction),
+                "ret": self.upperbound_statistic,
+            }
+        )
 
         surv = surveillance.glrpois(sts, control=control)
         return surv

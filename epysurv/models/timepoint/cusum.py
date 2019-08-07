@@ -1,12 +1,13 @@
-from typing import *
 from dataclasses import dataclass
+from typing import *
+
 from rpy2 import robjects
 from rpy2.robjects import r
 from rpy2.robjects.packages import importr
 
 from ._base import STSBasedAlgorithm
 
-surveillance = importr('surveillance')
+surveillance = importr("surveillance")
 
 
 @dataclass
@@ -40,18 +41,21 @@ class Cusum(STSBasedAlgorithm):
     [2] D. A. Pierce and D. W. Schafer (1986), Residuals in Generalized Linear Models, Journal of the
         American Statistical Association, 81, 977–986
     """
+
     reference_value: float = 1.04
     decision_boundary: float = 2.26
     expected_numbers_method: str = "mean"
-    transform: str = 'standard'
+    transform: str = "standard"
     negbin_alpha: float = 0.1
 
     def _call_surveillance_algo(self, sts, detection_range):
-        control = r.list(range=detection_range,
-                         k=self.reference_value,
-                         h=self.decision_boundary,
-                         m=robjects.NULL if self.expected_numbers_method == "mean" else self.expected_numbers_method,
-                         trans=self.transform,
-                         alpha=self.negbin_alpha)
+        control = r.list(
+            range=detection_range,
+            k=self.reference_value,
+            h=self.decision_boundary,
+            m=robjects.NULL if self.expected_numbers_method == "mean" else self.expected_numbers_method,
+            trans=self.transform,
+            alpha=self.negbin_alpha,
+        )
         surv = surveillance.cusum(sts, control=control)
         return surv

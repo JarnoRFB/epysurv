@@ -1,10 +1,11 @@
 from dataclasses import dataclass
+
 from rpy2.robjects import r
 from rpy2.robjects.packages import importr
 
 from ._base import DisProgBasedAlgorithm
 
-surveillance = importr('surveillance')
+surveillance = importr("surveillance")
 
 
 @dataclass
@@ -25,14 +26,12 @@ class CDC(DisProgBasedAlgorithm):
     [2] Farrington, C. and N. Andrews (2003). Monitoring the Health of Populations, Chapter Outbreak
         Detection: Application to Infectious Disease Surveillance, pp. 203-231. Oxford University Press.
     """
+
     years_back: int = 5
     window_half_width: int = 1
     alpha: float = 0.001
 
     def _call_surveillance_algo(self, sts, detection_range):
-        control = r.list(range=detection_range,
-                         b=self.years_back,
-                         m=self.window_half_width,
-                         alpha=self.alpha)
+        control = r.list(range=detection_range, b=self.years_back, m=self.window_half_width, alpha=self.alpha)
         surv = surveillance.algo_cdc(sts, control=control)
         return surv

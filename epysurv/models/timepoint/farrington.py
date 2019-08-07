@@ -3,9 +3,9 @@ from dataclasses import dataclass
 from rpy2.robjects import r
 from rpy2.robjects.packages import importr
 
-from ._base import STSBasedAlgorithm, DisProgBasedAlgorithm
+from ._base import DisProgBasedAlgorithm, STSBasedAlgorithm
 
-surveillance = importr('surveillance')
+surveillance = importr("surveillance")
 
 
 @dataclass
@@ -47,6 +47,7 @@ class Farrington(DisProgBasedAlgorithm):
     [1] Farrington, C.P., Andrews, N.J, Beale A.D. and Catchpole, M.A. (1996): A statistical algorithm for
         the early detection of outbreaks of infectious disease. J. R. Statist. Soc. A, 159, 547-563.
     """
+
     years_back: int = 3
     window_half_width: int = 3
     reweight: bool = True
@@ -54,17 +55,19 @@ class Farrington(DisProgBasedAlgorithm):
     trend: bool = True
     past_period_cutoff: int = 4
     min_cases_in_past_periods: int = 5
-    power_transform: str = '2/3'
+    power_transform: str = "2/3"
 
     def _call_surveillance_algo(self, disprog_obj, detection_range):
-        control = r.list(range=detection_range,
-                         b=self.years_back,
-                         w=self.window_half_width,
-                         reweight=self.reweight,
-                         alpha=self.alpha,
-                         trend=self.trend,
-                         limit54=r.c(self.min_cases_in_past_periods, self.past_period_cutoff),
-                         powertrans=self.power_transform)
+        control = r.list(
+            range=detection_range,
+            b=self.years_back,
+            w=self.window_half_width,
+            reweight=self.reweight,
+            alpha=self.alpha,
+            trend=self.trend,
+            limit54=r.c(self.min_cases_in_past_periods, self.past_period_cutoff),
+            powertrans=self.power_transform,
+        )
 
         surv = surveillance.algo_farrington(disprog_obj, control=control)
         return surv
@@ -140,23 +143,25 @@ class FarringtonFlexible(STSBasedAlgorithm):
     trend_threshold: float = 0.05
     past_period_cutoff: int = 4
     min_cases_in_past_periods: int = 5
-    power_transform: str = '2/3'
+    power_transform: str = "2/3"
     past_weeks_not_included: int = 26
-    threshold_method: str = 'delta'
+    threshold_method: str = "delta"
 
     def _call_surveillance_algo(self, sts, detection_range):
-        control = r.list(range=detection_range,
-                         b=self.years_back,
-                         w=self.window_half_width,
-                         reweight=self.reweight,
-                         weightsThreshold=self.weights_threshold,
-                         alpha=self.alpha,
-                         trend=self.trend,
-                         trend_threshold=self.trend_threshold,
-                         limit54=r.c(self.min_cases_in_past_periods, self.past_period_cutoff),
-                         powertrans=self.power_transform,
-                         pastWeeksNotIncluded=self.past_weeks_not_included,
-                         thresholdMethod=self.threshold_method)
+        control = r.list(
+            range=detection_range,
+            b=self.years_back,
+            w=self.window_half_width,
+            reweight=self.reweight,
+            weightsThreshold=self.weights_threshold,
+            alpha=self.alpha,
+            trend=self.trend,
+            trend_threshold=self.trend_threshold,
+            limit54=r.c(self.min_cases_in_past_periods, self.past_period_cutoff),
+            powertrans=self.power_transform,
+            pastWeeksNotIncluded=self.past_weeks_not_included,
+            thresholdMethod=self.threshold_method,
+        )
 
         surv = surveillance.farringtonFlexible(sts, control=control)
         return surv
