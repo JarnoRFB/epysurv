@@ -37,6 +37,7 @@ install:
   - pip install -r requirements-dev.txt
 
 script:
+  - black --check epysurv
   - PYTHONPATH=. pytest --mypy -m mypy tests/
   - PYTHONPATH=. pytest --cov=epysurv tests/
 
