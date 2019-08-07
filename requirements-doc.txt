@@ -1,0 +1,6 @@
+-r requirements.txt
+sphinx
+sphinx_rtd_theme
+sphinxcontrib-bibtex
+nbsphinx
+doc8
