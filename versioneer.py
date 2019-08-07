@@ -1591,7 +1591,7 @@ def get_cmdclass():
         from distutils.command.build_py import build_py as _build_py
 
     class cmd_build_py(_build_py):
-        def run(self):
+        def run(self):  # lgtm [py/similar-function]
             root = get_root()
             cfg = get_config_from_root(root)
             versions = get_versions()
@@ -1649,7 +1649,7 @@ def get_cmdclass():
             from py2exe.build_exe import py2exe as _py2exe  # py2
 
         class cmd_py2exe(_py2exe):
-            def run(self):
+            def run(self):  # lgtm [py/similar-function]
                 root = get_root()
                 cfg = get_config_from_root(root)
                 versions = get_versions()

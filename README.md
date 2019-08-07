@@ -2,7 +2,8 @@
 [![Documentation Status](https://readthedocs.org/projects/epysurv/badge/?version=latest)](https://epysurv.readthedocs.io/en/latest/?badge=latest)
 [![Build Status](https://travis-ci.com/JarnoRFB/epysurv.svg?token=dmY4GfBz2Rs5oxYeuMhW&branch=master)](https://travis-ci.com/JarnoRFB/epysurv)
 [![codecov](https://codecov.io/gh/JarnoRFB/epysurv/branch/master/graph/badge.svg)](https://codecov.io/gh/JarnoRFB/epysurv)
-
+[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/JarnoRFB/epysurv.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/JarnoRFB/epysurv/context:python)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 # epysurv
 `epysurv` is a Pythonic wrapper around the [R surveillance package](https://cran.r-project.org/web/packages/surveillance/index.html) 
 that strives to implement a `scikit-learn` like API for epidemiological surveillance in Python. 

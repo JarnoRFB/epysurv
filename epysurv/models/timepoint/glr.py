@@ -1,6 +1,6 @@
 """Count data regression charts for the monitoring of surveillance time series as proposed by Höhle
 and Paul (2008). The implementation is described in Salmon et al. (2016)."""
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Tuple, Union
 
 from rpy2 import robjects

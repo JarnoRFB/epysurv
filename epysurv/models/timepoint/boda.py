@@ -1,4 +1,3 @@
-import warnings
 from dataclasses import dataclass
 
 from rpy2 import robjects
