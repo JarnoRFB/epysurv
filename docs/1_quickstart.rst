@@ -14,9 +14,4 @@ Installation
 
 Demo
 ----
-The link to the notebook contains a quick tour on how to use ``epysurv``
-
-.. toctree::
-   :maxdepth: 4
-
-   demo.ipynb 
+A `quick tour <demo.ipynb>`_ to using ``epysurv``.
