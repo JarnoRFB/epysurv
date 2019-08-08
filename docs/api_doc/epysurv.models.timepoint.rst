@@ -1,3 +1,5 @@
+.. _timepoint-model-api-doc:
+
 epysurv.models.timepoint package
 ================================
 

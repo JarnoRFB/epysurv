@@ -1,3 +1,5 @@
+.. _timeseries-model-api-doc:
+
 epysurv.models.timeseries package
 =================================
 

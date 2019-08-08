@@ -1,4 +1,4 @@
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/JarnoRFB/epysurv/master?filepath=demo.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/JarnoRFB/epysurv/master?filepath=docs/demo.ipynb)
 [![Documentation Status](https://readthedocs.org/projects/epysurv/badge/?version=latest)](https://epysurv.readthedocs.io/en/latest/?badge=latest)
 [![Build Status](https://travis-ci.com/JarnoRFB/epysurv.svg?token=dmY4GfBz2Rs5oxYeuMhW&branch=master)](https://travis-ci.com/JarnoRFB/epysurv)
 [![codecov](https://codecov.io/gh/JarnoRFB/epysurv/branch/master/graph/badge.svg)](https://codecov.io/gh/JarnoRFB/epysurv)
