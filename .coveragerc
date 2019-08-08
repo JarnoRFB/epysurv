@@ -4,8 +4,10 @@ exclude_lines =
     def __repr__
     raise AssertionError
     raise NotImplementedError
-    if __name__ == .__main__.:
+    if __name__ == __main__:
 omit =
     venv/
     tests/*
     setup.py
+    versioneer.py
+    epysurv/_version.py

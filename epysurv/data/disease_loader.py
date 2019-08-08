@@ -1,10 +1,6 @@
 import os
 import pickle
 
-from .filter_combination import FilterCombination  # pylint: disable=unused-import
-
-# Needs to be imported because of the pickled object requires it.
-
 
 def load_diseases(path):
     disease_pickles = [
