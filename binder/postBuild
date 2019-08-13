@@ -1,2 +1,2 @@
 #!/bin/bash
-jupyter nbconvert --ClearOutputPreprocessor.enabled=True --inplace demo.ipynb
+jupyter nbconvert --ClearOutputPreprocessor.enabled=True --inplace docs/demo.ipynb
