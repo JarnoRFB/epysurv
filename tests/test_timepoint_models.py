@@ -69,3 +69,27 @@ def test_long_prediction(train_data, test_data, shared_datadir, Algo):
     pred = model.predict(test_data)
     saved_predictions = load_predictions(shared_datadir / f"{Algo.__name__}_pred.csv")
     assert_frame_equal(pred, saved_predictions)
+
+
+def test_fit_does_not_change_input(train_data, test_data):
+    model = EarsC1()
+    original_train_data = train_data.copy()
+    model.fit(train_data)
+    assert_frame_equal(original_train_data, train_data)
+
+
+def test_predict_does_not_change_input(train_data, test_data):
+    model = EarsC1()
+    original_train_data = train_data.copy()
+    original_test_data = test_data.copy()
+    _ = model.fit(train_data).predict(test_data)
+    assert_frame_equal(original_train_data, train_data)
+    assert_frame_equal(original_test_data, test_data)
+
+
+def test_output_format(train_data, test_data):
+    model = EarsC1()
+    original_train_data = train_data.copy()
+    original_test_data = test_data.copy()
+    prediction = model.fit(train_data).predict(test_data)
+    assert set(test_data.columns) == (set(prediction.columns) - {"alarm"})

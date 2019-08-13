@@ -34,12 +34,13 @@ class TimepointSurveillanceAlgorithm:
 
     _training_data: pd.DataFrame = field(init=False, repr=False)
 
-    def fit(self, data: pd.DataFrame):
+    def fit(self, data: pd.DataFrame) -> "TimepointSurveillanceAlgorithm":
         """Expects data with time series index, case counts and outbreak labels."""
         # Remove outbreaks cases from baseline.
         data = data.copy()
         data.n_cases -= data.n_outbreak_cases
         self._training_data = data
+        return self
 
     def predict(self, data: pd.DataFrame):
         """Expects data with time series index and case counts."""
@@ -97,7 +98,7 @@ class SurveillanceRPackageAlgorithm(TimepointSurveillanceAlgorithm):
         """
         Predict outbreaks.
 
-        Attributes
+        Parameters
         ----------
         data
             Dataframe with DateTimeIndex containing the columns "n_cases".
@@ -107,23 +108,20 @@ class SurveillanceRPackageAlgorithm(TimepointSurveillanceAlgorithm):
             Original dataframe with "alarm" column added.
         """
         super().predict(data)
-        prediction_len = len(data)
         # Concat training and prediction data. make index array for range param.
-        data = (
+        full_data = (
             pd.concat((self._training_data, data), keys=["train", "test"])
             .reset_index(level=0)
             .rename(columns={"level_0": "provenance"})
         )
-        r_instance = self._prepare_r_instance(data)
-        # R indexes are 0-based. Therefore we add 1.
-        detection_range = robjects.IntVector(np.where(data.provenance == "test")[0] + 1)
-        surveillance_result = self._call_surveillance_algo(r_instance, detection_range)
-        alarm = self._extract_alarms(surveillance_result)
-        predictions = data.copy()
-        predictions["alarm"] = np.append(
-            (len(predictions) - len(alarm)) * [np.nan], alarm
+        r_instance = self._prepare_r_instance(full_data)
+        # R indexes are 1-based. Therefore we add 1.
+        detection_range = robjects.IntVector(
+            np.where(full_data.provenance == "test")[0] + 1
         )
-        predictions = predictions.iloc[-prediction_len:]
+        surveillance_result = self._call_surveillance_algo(r_instance, detection_range)
+        predictions = data.copy()
+        predictions["alarm"] = self._extract_alarms(surveillance_result).astype(int)
         return predictions
 
     def _None_to_NULL(self, obj):
@@ -133,11 +131,11 @@ class SurveillanceRPackageAlgorithm(TimepointSurveillanceAlgorithm):
         """Transform dataframe into R data structure on which the R algorithm can work."""
         raise NotImplementedError
 
-    def _extract_alarms(self, surveillance_result):
+    def _extract_alarms(self, surveillance_result) -> np.array:
         """Extract the binary alarm array from the surveillance result R data structure."""
         raise NotImplementedError
 
-    def _call_surveillance_algo(self, sts, detection_range):
+    def _call_surveillance_algo(self, sts, detection_range) -> pd.DataFrame:
         raise NotImplementedError
 
 

@@ -18,7 +18,7 @@ def test_farrington_timeseries_prediciton(tsc_generator, shared_datadir):
     pred.alarm.plot()
     saved_predictions.alarm.plot()
 
-    pd.testing.assert_series_equal(pred.alarm, saved_predictions.alarm)
+    pd.testing.assert_series_equal(pred.alarm, saved_predictions.alarm.astype(int))
 
 
 def test_outbreak_case_subtraction():
