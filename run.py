@@ -1,7 +1,10 @@
 import matplotlib.pyplot as plt
 import pandas as pd
+from pandas.plotting import register_matplotlib_converters
 
 from epysurv.models import timepoint
+
+register_matplotlib_converters()
 
 
 def read_surv_data(filename):
@@ -34,12 +37,12 @@ data_train = read_surv_data("tests/data/salmonella_train.csv")
 data_test = read_surv_data("tests/data/salmonella_test.csv")
 
 algos = [
-    # timepoint.EarsC1,
-    # timepoint.EarsC2,
-    # timepoint.EarsC3,
+    timepoint.EarsC1,
+    timepoint.EarsC2,
+    timepoint.EarsC3,
     # timepoint.Farrington,
     # timepoint.FarringtonFlexible,
-    timepoint.Cusum,
+    # timepoint.Cusum,
     # timepoint.Bayes,
     # timepoint.RKI,
     # timepoint.GLRNegativeBinomial,
