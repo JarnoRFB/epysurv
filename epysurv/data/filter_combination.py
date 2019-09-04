@@ -66,8 +66,10 @@ class FilterCombination:
 
         Parameters
         ----------
-        min_len_in_weeks The minimum length of each time series.
-        split_years The years at which to split the data into train and test data.
+        min_len_in_weeks 
+            The minimum length of each time series.
+        split_years 
+            The years at which to split the data into train and test data.
 
         Returns
         -------
