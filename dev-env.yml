@@ -1,0 +1,14 @@
+name: epysurv-dev
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.7
+  - pip
+  - rpy2
+  - r-base
+  - r-gamlss
+  - r-gridbase
+  - r-mglm
+  - r-msm
+  - r-surveillance

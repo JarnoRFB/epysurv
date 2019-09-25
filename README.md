@@ -40,7 +40,23 @@ As `epysurv` requires both Python and R it can only be conveniently installed tr
 ## Documentation
 You can read the [documetation](https://epysurv.readthedocs.io/en/latest/?badge=latest) or try 
 an interactive demo on [binder](https://mybinder.org/v2/gh/JarnoRFB/epysurv/master?filepath=demo.ipynb).
-    
+
+## Development
+To set up a local development environment, run
+
+    conda env create -f dev-eny.yml
+    conda activate epysurv-dev
+    pip install -r requirements-dev.txt
+
+If you want to contribute to the documentation, run
+
+    pip install -r requirements-doc.txt
+
+to install the necessary packages for building the sphinx documentation.
+
+Pull requests are highly welcome!
+
+
 ## Related Projects
 * https://github.com/lvphj/epydemiology
 * https://github.com/cmrivers/epipy
