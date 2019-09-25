@@ -48,6 +48,12 @@ To set up a local development environment, run
     conda activate epysurv-dev
     pip install -r requirements-dev.txt
 
+To run all tests, simply run 
+
+    pytest
+
+in the project's root directory.
+
 If you want to contribute to the documentation, run
 
     pip install -r requirements-doc.txt

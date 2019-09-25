@@ -87,7 +87,7 @@ def _get_freq(data) -> int:
     return offset_to_freq[type(data.index.freq)]
 
 
-def _get_start_epoch(data: pd.DataFrame) -> str:
+def _get_start_epoch(data: pd.DataFrame) -> int:
     return getattr(data.index[0], offset_to_attr[type(data.index.freq)])
 
 
@@ -148,6 +148,7 @@ class STSBasedAlgorithm(SurveillanceRPackageAlgorithm):
                     f"The time series index has no valid frequency. Index={data.index}"
                 )
             data.index.freq = freq
+        print("input", r.c(data.index[0].year, _get_start_epoch(data)))
         sts = surveillance.sts(
             start=r.c(data.index[0].year, _get_start_epoch(data)),
             epoch=robjects.IntVector(

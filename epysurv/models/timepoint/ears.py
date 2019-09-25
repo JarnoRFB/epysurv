@@ -19,7 +19,7 @@ class _EarsBase(STSBasedAlgorithm):
     baseline: int = 7
     min_sigma: float = 0
 
-    method: ClassVar = None
+    method: ClassVar[str] = ""
 
     def _call_surveillance_algo(self, sts, detection_range):
         control = r.list(
