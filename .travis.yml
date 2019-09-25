@@ -26,7 +26,7 @@ before_install:
       conda update -q conda;
       conda config --add channels conda-forge;
       conda info -a;
-      conda env create -f dev-env.yml;
+      conda env create -f env.yml;
     fi
 
 install:
