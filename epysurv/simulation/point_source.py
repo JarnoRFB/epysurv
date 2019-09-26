@@ -3,10 +3,21 @@ import pandas as pd
 
 from rpy2 import robjects
 
-surveillance = rpackages.importr('surveillance')
+surveillance = rpackages.importr("surveillance")
 
 
-def simulate_outbreaks(K, p=0.99, r=0.01, length=100, A=1, alpha=1, beta=0, phi=0, frequency=1, state=robjects.NULL):
+def simulate_outbreaks(
+    K,
+    p=0.99,
+    r=0.01,
+    length=100,
+    A=1,
+    alpha=1,
+    beta=0,
+    phi=0,
+    frequency=1,
+    state=robjects.NULL,
+):
     """Simulation of epidemics which were introduced by point sources.
 
     The basis of this programme is
@@ -42,7 +53,19 @@ def simulate_outbreaks(K, p=0.99, r=0.01, length=100, A=1, alpha=1, beta=0, phi=
     -------
     pandas.DataFrame
     """
-    simulated = surveillance.sim_pointSource(p=p, r=r, length=length, A=A, alpha=alpha, beta=beta, phi=phi,
-                                             frequency=frequency, state=state, K=K)
+    simulated = surveillance.sim_pointSource(
+        p=p,
+        r=r,
+        length=length,
+        A=A,
+        alpha=alpha,
+        beta=beta,
+        phi=phi,
+        frequency=frequency,
+        state=state,
+        K=K,
+    )
     simulated = dict(zip(simulated.names, list(simulated)))
-    return pd.DataFrame({"observed": list(simulated["observed"]), "state": list(simulated["state"])})
+    return pd.DataFrame(
+        {"observed": list(simulated["observed"]), "state": list(simulated["state"])}
+    )

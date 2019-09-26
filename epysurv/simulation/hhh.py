@@ -5,12 +5,21 @@ from types import MappingProxyType
 from rpy2.robjects import r
 from rpy2 import robjects
 
-surveillance = rpackages.importr('surveillance')
-default_config = {"coefs": {"alpha": 1, "gamma": 0, "delta": 0, "lambda": 0, "phi": robjects.NULL,
-                            "psi": robjects.NULL, "period": 52},
-                  "neighbourhood": robjects.NULL,
-                  "population": robjects.NULL,
-                  "start": robjects.NULL}
+surveillance = rpackages.importr("surveillance")
+default_config = {
+    "coefs": {
+        "alpha": 1,
+        "gamma": 0,
+        "delta": 0,
+        "lambda": 0,
+        "phi": robjects.NULL,
+        "psi": robjects.NULL,
+        "period": 52,
+    },
+    "neighbourhood": robjects.NULL,
+    "population": robjects.NULL,
+    "start": robjects.NULL,
+}
 DEFAULTS = MappingProxyType(default_config)
 
 
@@ -69,4 +78,6 @@ def simulate_outbreaks(length, control: dict = DEFAULTS, model=robjects.NULL):
     )
     simulated = surveillance.simHHH(model=model, control=control, length=length)
     simulated = dict(zip(simulated.names, list(simulated)))
-    return pd.DataFrame({"mean": list(simulated["mean"]), "endemic": list(simulated["endemic"])})
+    return pd.DataFrame(
+        {"mean": list(simulated["mean"]), "endemic": list(simulated["endemic"])}
+    )

@@ -3,10 +3,12 @@ import pandas as pd
 
 from rpy2 import robjects
 
-surveillance = rpackages.importr('surveillance')
+surveillance = rpackages.importr("surveillance")
 
 
-def simulate_outbreaks(length, A=1, alpha=1, beta=0, phi=0, frequency=1, state=robjects.NULL, K=0):
+def simulate_outbreaks(
+    length, A=1, alpha=1, beta=0, phi=0, frequency=1, state=robjects.NULL, K=0
+):
     """Generation of a cyclic model of a Poisson distribution as background data for a simulated timevector.
 
     The mean of the Poisson distribution is modelled as:
@@ -36,7 +38,22 @@ def simulate_outbreaks(length, A=1, alpha=1, beta=0, phi=0, frequency=1, state=r
     -------
     pandas.DataFrame
     """
-    simulated = surveillance.sim_seasonalNoise(A=A, alpha=alpha, beta=beta, phi=phi,
-                                               length=length, frequency=frequency, state=state, K=K)
+    simulated = surveillance.sim_seasonalNoise(
+        A=A,
+        alpha=alpha,
+        beta=beta,
+        phi=phi,
+        length=length,
+        frequency=frequency,
+        state=state,
+        K=K,
+    )
     simulated = dict(zip(simulated.names, list(simulated)))
-    return pd.DataFrame({"t": list(simulated["t"]), "mu": list(simulated["mu"])})
+    print(simulated)
+    return pd.DataFrame(
+        {
+            "t": list(simulated["t"]),
+            "mu": list(simulated["mu"]),
+            "seasonal_background": list(simulated["seasonalBackground"]),
+        }
+    )
