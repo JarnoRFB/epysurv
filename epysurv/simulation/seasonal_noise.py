@@ -3,12 +3,22 @@ import pandas as pd
 
 from rpy2 import robjects
 
+from epysurv.simulation.utils import r_list_to_frame, add_date_time_index_to_frame
+
+
 surveillance = rpackages.importr("surveillance")
 
 
 def simulate_outbreaks(
-    length, A=1, alpha=1, beta=0, phi=0, frequency=1, state=robjects.NULL, K=0
-):
+    length: int,
+    amplitude=1,
+    alpha=1,
+    beta=0,
+    phi=0,
+    frequency=1,
+    state=None,
+    state_weight=0,
+) -> pd.DataFrame:
     """Generation of a cyclic model of a Poisson distribution as background data for a simulated timevector.
 
     The mean of the Poisson distribution is modelled as:
@@ -16,11 +26,10 @@ def simulate_outbreaks(
 
     Attributes
     ----------
-    A
+    amplitude
         amplitude (range of sinus), default = 1.
     alpha
-        parameter to move along the y-axis (negative values not allowed) with alpha >
-        = A, default = 1.
+        parameter to move along the y-axis (negative values not allowed) with alpha >= amplitude, default = 1.
     beta
         regression coefficient, default = 0.
     phi
@@ -30,30 +39,31 @@ def simulate_outbreaks(
     frequency
         factor to determine the oscillation-frequency, default = 1.
     state
-        if a state chain is entered the outbreaks will be additional weighted by K
-    K
+        if a state chain is entered the outbreaks will be additional weighted by state_weight
+    state_weight
         additional weight for an outbreak which influences the distribution parameter mu, default = 0.
 
     Returns
     -------
-    pandas.DataFrame
+    A DataFrame of an endemic time series that contains n weeks where n=``length``.
+    The DataFrame is divided into timesteps where each step is equivalent to one calender week.
+    It contains a ``mean`` column which is the mean case count according to the sinus based model.
+    And finally, it contains a column ``n_cases`` that consists of the generates case counts
+    based on the sinus model
     """
     simulated = surveillance.sim_seasonalNoise(
-        A=A,
+        A=amplitude,
         alpha=alpha,
         beta=beta,
         phi=phi,
         length=length,
         frequency=frequency,
-        state=state,
-        K=K,
+        state=robjects.NULL if state is None else robjects.IntVector(state),
+        K=state_weight,
     )
-    simulated = dict(zip(simulated.names, list(simulated)))
-    print(simulated)
-    return pd.DataFrame(
-        {
-            "t": list(simulated["t"]),
-            "mu": list(simulated["mu"]),
-            "seasonal_background": list(simulated["seasonalBackground"]),
-        }
+    simulated = r_list_to_frame(simulated, ["mu", "seasonalBackground"])
+    simulated = simulated.rename(
+        columns={"mu": "mean", "seasonalBackground": "n_cases"}
     )
+    simulated["n_outbreak_cases"] = 0
+    return simulated
