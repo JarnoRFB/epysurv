@@ -2,7 +2,7 @@ import pandas as pd
 import pytest
 from pandas.testing import assert_frame_equal
 
-from epysurv.simulation import point_source, seasonal_noise
+from epysurv.simulations import point_source, seasonal_noise
 
 
 def load_simulations(filepath):
