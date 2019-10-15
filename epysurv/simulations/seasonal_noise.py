@@ -2,6 +2,8 @@ import rpy2.robjects.packages as rpackages
 import pandas as pd
 
 from rpy2 import robjects
+from typing import Sequence
+
 
 from epysurv.simulation.utils import r_list_to_frame, add_date_time_index_to_frame
 
@@ -11,13 +13,14 @@ surveillance = rpackages.importr("surveillance")
 
 def simulate_outbreaks(
     length: int,
-    amplitude=1,
-    alpha=1,
-    beta=0,
-    phi=0,
-    frequency=1,
-    state=None,
-    state_weight=0,
+    seed: int,
+    amplitude: float = 1,
+    alpha: float = 1,
+    beta: float = 0,
+    phi: int = 0,
+    frequency: float = 1,
+    state: Sequence[int] = None,
+    state_weight: float = 0,
 ) -> pd.DataFrame:
     """Generation of a cyclic model of a Poisson distribution as background data for a simulated timevector.
 
@@ -38,6 +41,8 @@ def simulate_outbreaks(
         number of weeks to model.
     frequency
         factor to determine the oscillation-frequency, default = 1.
+    seed
+        a seed for the random number generation
     state
         if a state chain is entered the outbreaks will be additional weighted by state_weight
     state_weight
@@ -51,6 +56,8 @@ def simulate_outbreaks(
     And finally, it contains a column ``n_cases`` that consists of the generates case counts
     based on the sinus model
     """
+    if seed:
+        robjects.r(f"set.seed({seed})")
     simulated = surveillance.sim_seasonalNoise(
         A=amplitude,
         alpha=alpha,
@@ -61,9 +68,11 @@ def simulate_outbreaks(
         state=robjects.NULL if state is None else robjects.IntVector(state),
         K=state_weight,
     )
+
     simulated = r_list_to_frame(simulated, ["mu", "seasonalBackground"])
-    simulated = simulated.rename(
-        columns={"mu": "mean", "seasonalBackground": "n_cases"}
+    simulated = (
+        simulated.pipe(add_date_time_index_to_frame)
+        .rename(columns={"mu": "mean", "seasonalBackground": "n_cases"})
+        .assign(n_outbreak_cases=0)
     )
-    simulated["n_outbreak_cases"] = 0
     return simulated
