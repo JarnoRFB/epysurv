@@ -2,7 +2,8 @@ import pandas as pd
 import pytest
 from pandas.testing import assert_frame_equal
 
-from epysurv.simulations import point_source, seasonal_noise
+from epysurv.simulation.point_source import PointSource
+from epysurv.simulation.seasonal_noise import SeasonalNoise
 
 
 def load_simulations(filepath):
@@ -12,17 +13,20 @@ def load_simulations(filepath):
     return simulations
 
 
-simulations_to_test = [
-    (point_source, {"state_weight": 1, "seed": 1}),
-    (seasonal_noise, {"length": 100, "seed": 1}),
-]
-
-
-@pytest.mark.parametrize("simulation_algo, params", simulations_to_test)
-def test_simulate_outbreaks(simulation_algo, params, shared_datadir):
+@pytest.mark.parametrize("SimulationAlgo", [PointSource, SeasonalNoise])
+def test_simulate_outbreaks(SimulationAlgo, shared_datadir):
     """Test against changes in simulation behavior."""
-    simulated = simulation_algo.simulate_outbreaks(**params)
+    simulation_model = SimulationAlgo(seed=1)
+    simulated = simulation_model.simulate(length=100, state_weight=1)
     saved_simulation = load_simulations(
-        shared_datadir / f"{simulation_algo.__name__.split('.')[-1]}_simulation.csv"
+        shared_datadir / f"{SimulationAlgo.__name__}_simulation.csv"
     )
     assert_frame_equal(simulated, saved_simulation)
+
+
+@pytest.mark.parametrize("SimulationAlgo", [PointSource, SeasonalNoise])
+def test_simulation_model_format(SimulationAlgo):
+    simulation_model = SimulationAlgo()
+    simulated = simulation_model.simulate(length=1)
+    assert "n_cases" in simulated.columns
+    assert "n_outbreak_cases" in simulated.columns

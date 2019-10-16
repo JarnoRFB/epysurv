@@ -1,4 +1,4 @@
-dates,raw_cases,is_outbreak,timestep,n_outbreak_cases
+dates,n_cases,is_outbreak,timestep,n_outbreak_cases
 2020-01-06,3,0.0,1,0.0
 2020-01-13,4,0.0,2,0.0
 2020-01-20,3,0.0,3,0.0
