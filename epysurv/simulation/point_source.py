@@ -4,7 +4,7 @@ import pandas as pd
 from rpy2 import robjects
 from typing import Sequence
 
-from epysurv.simulations.utils import r_list_to_frame, add_date_time_index_to_frame
+from epysurv.simulation.utils import r_list_to_frame, add_date_time_index_to_frame
 
 surveillance = rpackages.importr("surveillance")
 
