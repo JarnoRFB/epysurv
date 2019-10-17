@@ -10,10 +10,10 @@ surveillance = importr("surveillance")
 
 @dataclass
 class OutbreakP(STSBasedAlgorithm):
-    """
+    """The OutbreakP model.
+
     Attributes
     ----------
-
     threshold
         The threshold value. Once the outbreak statistic is above this threshold an alarm is sounded.
     upperbound_statistic

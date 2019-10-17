@@ -6,3 +6,11 @@ from .salmonella_data import (
     timeseries_classifaction_generator,
     timeseries_classifcation,
 )
+
+__all__ = [
+    "load_diseases",
+    "TimeseriesClassificationData",
+    "salmonella",
+    "timeseries_classifaction_generator",
+    "timeseries_classifcation",
+]

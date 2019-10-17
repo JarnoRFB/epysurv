@@ -1,6 +1,6 @@
 import os
 from collections import namedtuple
-from typing import *
+from typing import *  # NOQA
 
 import pandas as pd
 

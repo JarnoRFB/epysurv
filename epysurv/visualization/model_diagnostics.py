@@ -26,7 +26,6 @@ def plot_confusion_matrix(
 
     Returns
     -------
-
         The resulting confusion matrix figure
     """
     df_cm = pd.DataFrame(confusion_matrix, index=class_names, columns=class_names)

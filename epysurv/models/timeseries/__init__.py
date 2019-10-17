@@ -1,4 +1,4 @@
-from .convert_interface import *
+from .convert_interface import *  # NOQA
 
 # All these exports are dynamically generated.
 __all__ = [
