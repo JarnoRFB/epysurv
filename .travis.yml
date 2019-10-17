@@ -38,7 +38,7 @@ install:
 
 script:
   - black --check epysurv
-  - PYTHONPATH=. pytest --mypy -m mypy tests/
+  - mypy --package epysurv
   - PYTHONPATH=. pytest --cov=epysurv tests/
 
 after_success:
