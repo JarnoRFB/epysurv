@@ -11,7 +11,7 @@ from rpy2.robjects.packages import importr
 from epysurv.metrics.outbreak_detection import ghozzi_score
 
 
-def silence_R_output():
+def silence_r_output():
     """Silence output from R code.
 
     This is useful, because some algorithm otherwise print every time they are invoked.
@@ -22,7 +22,7 @@ def silence_R_output():
         r.sink("NUL")
 
 
-silence_R_output()
+silence_r_output()
 numpy2ri.activate()
 pandas2ri.activate()
 surveillance = importr("surveillance")
@@ -122,7 +122,7 @@ class SurveillanceRPackageAlgorithm(TimepointSurveillanceAlgorithm):
         surveillance_result = self._call_surveillance_algo(r_instance, detection_range)
         return data.assign(alarm=self._extract_alarms(surveillance_result).astype(int))
 
-    def _None_to_NULL(self, obj):
+    def _None_to_NULL(self, obj):  # NOQA
         return robjects.NULL if obj is None else obj
 
     def _prepare_r_instance(self, data: pd.DataFrame):

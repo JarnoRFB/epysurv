@@ -1,6 +1,5 @@
 from collections import namedtuple
 from dataclasses import dataclass, field
-from typing import *
 
 import pandas as pd
 
@@ -66,9 +65,9 @@ class FilterCombination:
 
         Parameters
         ----------
-        min_len_in_weeks 
+        min_len_in_weeks
             The minimum length of each time series.
-        split_years 
+        split_years
             The years at which to split the data into train and test data.
 
         Returns

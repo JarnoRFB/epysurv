@@ -1,5 +1,8 @@
-"""Count data regression charts for the monitoring of surveillance time series as proposed by Höhle
-and Paul (2008). The implementation is described in Salmon et al. (2016)."""
+"""Count data regression charts for the monitoring of surveillance time series.
+
+Method as proposed by Höhle and Paul (2008).
+The implementation is described in Salmon et al. (2016).
+"""
 from dataclasses import dataclass
 from typing import Tuple, Union
 
@@ -91,8 +94,7 @@ class GLRNegativeBinomial(STSBasedAlgorithm):
 
 @dataclass
 class GLRPoisson(STSBasedAlgorithm):
-    """
-    Generalized likelihood ratio algorithm using Poisson distribution.
+    """Generalized likelihood ratio algorithm using Poisson distribution.
 
     Attributes
     ----------
@@ -112,6 +114,7 @@ class GLRPoisson(STSBasedAlgorithm):
         a string specifying the type of upperbound-statistic that is returned.
         With "cases" the number of cases that would have been necessary
         to produce an alarm or with "value" the GLR-statistic is computed.
+
     References
     ----------
     .. [1] Höhle, M. and Paul, M. (2008): Count data regression charts for the monitoring of surveillance time

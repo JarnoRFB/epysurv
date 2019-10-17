@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import *
+from typing import ClassVar
 
 from rpy2.robjects import r
 from rpy2.robjects.packages import importr
@@ -11,9 +11,7 @@ surveillance = importr("surveillance")
 
 @dataclass
 class _EarsBase(STSBasedAlgorithm):
-    """
-    Base class for the Ears models.
-    """
+    """Base class for the Ears models."""
 
     alpha: float = 0.001
     baseline: int = 7
@@ -34,10 +32,11 @@ class _EarsBase(STSBasedAlgorithm):
 
 
 class EarsC1(_EarsBase):
-    """
-    Computes a threshold for the number of counts based on values from the recent past. This is then
-    compared to the observed number of counts. If the observation is above a specific quantile of the
-    prediction interval, then an alarm is raised. This method is especially useful for data without many
+    """Computes a threshold for the number of counts based on values from the recent past.
+
+    This is then compared to the observed number of counts. If the observation is above
+    a specific quantile of the prediction interval, then an alarm is raised.
+    This method is especially useful for data without many
     historic values, since it only needs counts from the recent past.
 
     Attributes
@@ -61,10 +60,11 @@ class EarsC1(_EarsBase):
 
 
 class EarsC2(_EarsBase):
-    """
-    Computes a threshold for the number of counts based on values from the recent past. This is then
-    compared to the observed number of counts. If the observation is above a specific quantile of the
-    prediction interval, then an alarm is raised. This method is especially useful for data without many
+    """Computes a threshold for the number of counts based on values from the recent past.
+
+    This is then compared to the observed number of counts. If the observation is above
+    a specific quantile of the prediction interval, then an alarm is raised.
+    This method is especially useful for data without many
     historic values, since it only needs counts from the recent past.
 
     Attributes
@@ -89,7 +89,8 @@ class EarsC2(_EarsBase):
 
 @dataclass
 class EarsC3(_EarsBase):
-    """
+    """The EarsC3 model.
+
     Computes a threshold for the number of counts based on values from the recent past. This is then
     compared to the observed number of counts. If the observation is above a specific quantile of the
     prediction interval, then an alarm is raised. This method is especially useful for data without many

@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import *
+from typing import *  # NOQA
 
 from rpy2 import robjects
 from rpy2.robjects import r
@@ -12,7 +12,8 @@ surveillance = importr("surveillance")
 
 @dataclass
 class Cusum(STSBasedAlgorithm):
-    """
+    r"""The Cusum model.
+
     Attributes
     ----------
     reference_value
@@ -35,7 +36,7 @@ class Cusum(STSBasedAlgorithm):
         - ``"none"`` no transformation
     negbin_alpha
         Parameter of the negative binomial distribution, such that the variance is :math:`m + α \cdot m2`.
-    
+
     References
     ----------
     .. [1] G. Rossi, L. Lampugnani and M. Marchi (1999), An approximate CUSUM procedure for surveillance of health events, Statistics in Medicine, 18, 2111–2122
