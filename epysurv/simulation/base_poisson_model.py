@@ -1,7 +1,7 @@
 import pandas as pd
 
 from abc import abstractmethod, ABCMeta
-from typing import Optional, Sequence
+from typing import Optional
 
 
 class BasePoissonModel(metaclass=ABCMeta):
@@ -25,6 +25,6 @@ class BasePoissonModel(metaclass=ABCMeta):
         self.seed = seed
 
     @abstractmethod
-    def simulate(self, length: int, state_weight: Optional[float]) -> "pd.DataFrame":
+    def simulate(self, length: int, state_weight: Optional[float]) -> pd.DataFrame:
         """An abstract method that starts the simulation based on the hyper parameter of the model."""
         pass

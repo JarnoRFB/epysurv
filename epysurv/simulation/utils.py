@@ -4,7 +4,7 @@ import rpy2
 from typing import Sequence
 
 
-def r_list_to_frame(r_list, names: Sequence[str]) -> "rpy2.robjects.vectors.ListVector":
+def r_list_to_frame(r_list, names: Sequence[str]) -> rpy2.robjects.vectors.ListVector:
     """Transforms a (named) list in R to a Pandas DataFrame"""
     rlist_as_frame = pd.DataFrame({name: list(r_list.rx2(name)) for name in names})
     # Add timestep column to unify frames since some simulations return a timestep column but others don't
