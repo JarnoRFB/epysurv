@@ -1,10 +1,10 @@
-from abc import ABCMeta, abstractmethod
+from abc import ABC, abstractmethod
 from typing import Optional
 
 import pandas as pd
 
 
-class BasePoissonModel(metaclass=ABCMeta):
+class BasePoissonModel(ABC):
     """An abstract class for a Poisson-based linear model for epidemic/endemic disease count simulation"""
 
     @abstractmethod
