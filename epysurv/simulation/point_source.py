@@ -1,16 +1,19 @@
+from dataclasses import dataclass
 from typing import Optional, Sequence
 
 import pandas as pd
 import rpy2.robjects.packages as rpackages
 from rpy2 import robjects
 
-from epysurv.simulation.base_poisson_model import BasePoissonModel
+from epysurv.simulation.base import BaseSimulation
 from epysurv.simulation.utils import add_date_time_index_to_frame, r_list_to_frame
 
 surveillance = rpackages.importr("surveillance")
+base = rpackages.importr("base")
 
 
-class PointSource(BasePoissonModel):
+@dataclass
+class PointSource(BaseSimulation):
     """Simulation of epidemics which were introduced by point sources.
 
     The basis of this programme is a combination of a Hidden Markov Model
@@ -41,27 +44,14 @@ class PointSource(BasePoissonModel):
     http://surveillance.r-forge.r-project.org/
     """
 
-    def __init__(
-        self,
-        alpha: float = 1.0,
-        amplitude: float = 1.0,
-        beta: float = 0.0,
-        frequency: int = 1,
-        p: float = 0.99,
-        phi: int = 0,
-        r: float = 0.01,
-        seed: Optional[int] = None,
-    ) -> None:
-        super().__init__(
-            alpha=alpha,
-            amplitude=amplitude,
-            beta=beta,
-            frequency=frequency,
-            phi=phi,
-            seed=seed,
-        )
-        self.p = p
-        self.r = r
+    alpha: float = 1.0
+    amplitude: float = 1.0
+    beta: float = 0.0
+    frequency: int = 1
+    p: float = 0.99
+    phi: int = 0
+    r: float = 0.01
+    seed: Optional[int] = None
 
     def simulate(
         self,
@@ -88,7 +78,6 @@ class PointSource(BasePoissonModel):
         The DataFrame contains the case number in the column ``n_cases`` and the column ``is_outbreak`` contains
         a Boolean weather this week contains outbreak cases."""
         if self.seed:
-            base = rpackages.importr("base")
             base.set_seed(self.seed)
         simulated = surveillance.sim_pointSource(
             p=self.p,
