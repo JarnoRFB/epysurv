@@ -10,7 +10,8 @@ surveillance = importr("surveillance")
 
 @dataclass
 class CDC(DisProgBasedAlgorithm):
-    """
+    """The CDC model.
+
     Attributes
     ----------
     years_back
@@ -19,6 +20,7 @@ class CDC(DisProgBasedAlgorithm):
         Number of weeks to include before and after the current week in each year.
     alpha
         An approximate (two-sided)(1 − α) prediction interval is calculated.
+
     References
     ----------
     .. [1] Stroup, D., G. Williamson, J. Herndon, and J. Karon (1989). Detection of aberrations in the occurence of

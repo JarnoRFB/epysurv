@@ -10,11 +10,11 @@ class NonLearningTimeseriesClassificationMixin:
     def predict(self, data_generator) -> pd.DataFrame:
         alarms = []
         times = []
-        for X, _ in data_generator:
+        for x, _ in data_generator:
             # Fit on all data, except the last point, that is to be predicted.
-            super().fit(X.iloc[:-1])
+            super().fit(x.iloc[:-1])
             prediction = super().predict(
-                X.iloc[[-1]]
+                x.iloc[[-1]]
             )  # Use inner brackets to get dytpe preserving frame and not series.
             # As only a single value should be returned, we can access this single item.
             [alarm] = prediction.alarm
