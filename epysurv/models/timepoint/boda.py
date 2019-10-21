@@ -12,7 +12,8 @@ surveillance = importr("surveillance")
 
 @dataclass
 class Boda(STSBasedAlgorithm):
-    """
+    """The Boda model.
+
     Attributes
     ----------
     trend

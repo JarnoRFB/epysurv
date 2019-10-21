@@ -3,7 +3,9 @@ import pandas as pd
 
 
 def ghozzi_score(prediction_result: pd.DataFrame) -> float:
-    """Evalutes the performance of an outbreak detection using the following formula:
+    """Evalutes the performance of an outbreak detection.
+
+    Using the following formula:
     sum(p[t] * c[t] - (1 - p[t]) * c[t] - (p[t] != o[t]) * mean(c) for t in timeseries) / sum(c)
     p: alarm
     c: count of outbreak cases
@@ -15,7 +17,7 @@ def ghozzi_score(prediction_result: pd.DataFrame) -> float:
         Dataframe containing the columns "alarm", "outbreak" and "outbreak_cases"
 
     Returns
-    -------    
+    -------
     A maximum score of 1.
     """
     # Outbreaks that were correctly predicted.
@@ -44,7 +46,9 @@ def ghozzi_score(prediction_result: pd.DataFrame) -> float:
 
 
 def ghozzi_case_score(prediction_result: pd.DataFrame) -> float:
-    """Evalutes the performance of an outbreak detection using the following formula:
+    """Evalutes the performance of an outbreak detection.
+
+    Using the following formula:
     sum(p[t] * c[t] - (1 - p[t]) * c[t] - (p[t] != o[t]) * e[t] for t in timeseries) / sum(c)
     p: alarm
     c: count of outbreak cases
