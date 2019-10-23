@@ -50,7 +50,7 @@ class SeasonalNoise(BaseSimulation):
     def simulate(
         self,
         length: int,
-        state_weight: float = 0.0,
+        state_weight: Optional[float] = None,
         state: Optional[Sequence[int]] = None,
     ) -> pd.DataFrame:
         """
