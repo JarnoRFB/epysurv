@@ -1,16 +1,19 @@
-import rpy2.robjects.packages as rpackages
+from dataclasses import dataclass
+from typing import Optional, Sequence
+
 import pandas as pd
-
+import rpy2.robjects.packages as rpackages
 from rpy2 import robjects
-from typing import Sequence, Optional
 
-from epysurv.simulation.utils import r_list_to_frame, add_date_time_index_to_frame
-from epysurv.simulation.base_poisson_model import BasePoissonModel
+from epysurv.simulation.base import BaseSimulation
+from epysurv.simulation.utils import add_date_time_index_to_frame, r_list_to_frame
 
 surveillance = rpackages.importr("surveillance")
+base = rpackages.importr("base")
 
 
-class PointSource(BasePoissonModel):
+@dataclass
+class PointSource(BaseSimulation):
     """Simulation of epidemics which were introduced by point sources.
 
     The basis of this programme is a combination of a Hidden Markov Model
@@ -41,32 +44,19 @@ class PointSource(BasePoissonModel):
     http://surveillance.r-forge.r-project.org/
     """
 
-    def __init__(
-        self,
-        alpha: float = 1.0,
-        amplitude: float = 1.0,
-        beta: float = 0.0,
-        frequency: int = 1,
-        p: float = 0.99,
-        phi: int = 0,
-        r: float = 0.01,
-        seed: Optional[int] = None,
-    ) -> None:
-        super().__init__(
-            alpha=alpha,
-            amplitude=amplitude,
-            beta=beta,
-            frequency=frequency,
-            phi=phi,
-            seed=seed,
-        )
-        self.p = p
-        self.r = r
+    alpha: float = 1.0
+    amplitude: float = 1.0
+    beta: float = 0.0
+    frequency: int = 1
+    p: float = 0.99
+    phi: int = 0
+    r: float = 0.01
+    seed: Optional[int] = None
 
     def simulate(
         self,
         length: int,
-        state_weight: float = 0,
+        state_weight: Optional[float]= None,
         state: Optional[Sequence[int]] = None,
     ) -> pd.DataFrame:
         """
@@ -88,7 +78,6 @@ class PointSource(BasePoissonModel):
         The DataFrame contains the case number in the column ``n_cases`` and the column ``is_outbreak`` contains
         a Boolean weather this week contains outbreak cases."""
         if self.seed:
-            base = rpackages.importr("base")
             base.set_seed(self.seed)
         simulated = surveillance.sim_pointSource(
             p=self.p,
@@ -100,7 +89,7 @@ class PointSource(BasePoissonModel):
             phi=self.phi,
             frequency=self.frequency,
             state=robjects.NULL if state is None else robjects.IntVector(state),
-            K=state_weight,
+            K=robjects.NULL if state_weight is None else state_weight,
         )
 
         simulated_as_frame = r_list_to_frame(simulated, ["observed", "state"])
