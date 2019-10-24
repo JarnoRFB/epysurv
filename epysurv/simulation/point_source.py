@@ -56,12 +56,14 @@ class PointSource(BaseSimulation):
     def simulate(
         self,
         length: int,
-        state_weight: Optional[float]= None,
+        state_weight: Optional[float] = None,
         state: Optional[Sequence[int]] = None,
     ) -> pd.DataFrame:
         """
+        Simulate outbreak.
+
         Parameters
-        -------
+        ----------
         length
             number of weeks to model, default 100. length is ignored if state is given. In this case the length of state
             is used.
@@ -73,10 +75,11 @@ class PointSource(BaseSimulation):
 
         Returns
         -------
-        A DataFrame of an epidemic time series that contains n weeks where n=``length`` or length of ``state``.
-        Each row in the DataFrame's represents one timesteps where each step is equivalent to one calender week.
-        The DataFrame contains the case number in the column ``n_cases`` and the column ``is_outbreak`` contains
-        a Boolean weather this week contains outbreak cases."""
+        A DataFrame of an epidemic time series that contains n weeks where n = ``length`` or length of ``state``.
+            Each row in the DataFrame's represents one timesteps where each step is equivalent to one calender week.
+            The DataFrame contains the case number in the column ``n_cases`` and the column ``is_outbreak`` contains
+            a Boolean weather this week contains outbreak cases.
+        """
         if self.seed:
             base.set_seed(self.seed)
         simulated = surveillance.sim_pointSource(

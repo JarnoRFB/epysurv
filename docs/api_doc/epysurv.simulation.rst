@@ -18,5 +18,4 @@ Module contents
 
 .. automodule:: epysurv.simulation
    :members:
-   :undoc-members:
    :show-inheritance:

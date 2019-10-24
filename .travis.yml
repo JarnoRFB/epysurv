@@ -37,8 +37,9 @@ install:
   - pip install -r requirements-dev.txt
 
 script:
-  - black --check epysurv
+  - black --check epysurv/ tests/
   - mypy --package epysurv
+  - flake8 epysurv
   - PYTHONPATH=. pytest --cov=epysurv tests/
 
 after_success:
