@@ -47,6 +47,7 @@ To set up a local development environment, run
     conda env create -f eny.yml
     conda activate epysurv-dev
     pip install -r requirements-dev.txt
+    pre-commit install 
 
 To run all tests, simply run 
 
