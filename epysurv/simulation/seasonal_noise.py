@@ -13,11 +13,11 @@ surveillance = rpackages.importr("surveillance")
 
 @dataclass
 class SeasonalNoise(BaseSimulation):
-    """Generation of a cyclic model of a Poisson distribution as background data for a simulated timevector.
+    r"""Generation of a cyclic model of a Poisson distribution as background data for a simulated timevector.
 
     The mean of the Poisson distribution is modelled as:
-    :math:`\\mu = \\exp{(amplitude\\sin{(frequency \\cdot (t + \\phi))} + \\alpha + \\beta * week_t + K * state)}`
-    with :math:`\\omega = \\pi / 52`
+    :math:`\mu = \exp{(amplitude\sin{(frequency \cdot (t + \phi))} + \alpha + \beta \cdot week_t + K \cdot state)}`
+    with :math:`\omega = \pi / 52`
 
     Attributes
     ----------
@@ -53,9 +53,10 @@ class SeasonalNoise(BaseSimulation):
         state_weight: Optional[float] = None,
         state: Optional[Sequence[int]] = None,
     ) -> pd.DataFrame:
-        """
+        """Simulate outbreaks.
+
         Parameters
-        -------
+        ----------
         length
             number of weeks to model, default 100. length is ignored if state is given. In this case the length of state
             is used.
@@ -67,11 +68,11 @@ class SeasonalNoise(BaseSimulation):
 
         Returns
         -------
-        A DataFrame of an endemic time series that contains n weeks where n=``length``.
-        Each row in the DataFrame's represents one timesteps where each step is equivalent to one calender week.
-        It contains a ``mean`` column which is the mean case count according to the sinus based model.
-        And finally, it contains a column ``n_cases`` that consists of the generates case counts
-        based on the sinus model
+        A DataFrame of an endemic time series that contains n weeks where n = ``length``.
+            Each row in the DataFrame's represents one timesteps where each step is equivalent to one calender week.
+            It contains a ``mean`` column which is the mean case count according to the sinus based model.
+            And finally, it contains a column ``n_cases`` that consists of the generates case counts
+            based on the sinus model.
         """
         if self.seed:
             base = robjects.packages.importr("base")
