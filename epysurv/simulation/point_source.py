@@ -56,7 +56,7 @@ class PointSource(BaseSimulation):
     def simulate(
         self,
         length: int,
-        state_weight: Optional[float] = None,
+        state_weight: float = 0,
         state: Optional[Sequence[int]] = None,
     ) -> pd.DataFrame:
         """
@@ -92,7 +92,7 @@ class PointSource(BaseSimulation):
             phi=self.phi,
             frequency=self.frequency,
             state=robjects.NULL if state is None else robjects.IntVector(state),
-            K=robjects.NULL if state_weight is None else state_weight,
+            K=state_weight,
         )
 
         simulated_as_frame = r_list_to_frame(simulated, ["observed", "state"])
