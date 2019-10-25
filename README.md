@@ -34,12 +34,12 @@ model.predict(test)
 ```
 
 ## Installation
-As `epysurv` requires both Python and R it can only be conveniently installed trough [`conda`](https://docs.conda.io/en/latest/):
+As `epysurv` requires both Python and R it can only be conveniently installed through [`conda`](https://docs.conda.io/en/latest/):
 
     conda install -c conda-forge epysurv 
 
 ## Documentation
-You can read the [documetation](https://epysurv.readthedocs.io/en/latest/?badge=latest) or try 
+You can read the [documentation](https://epysurv.readthedocs.io/en/latest/?badge=latest) or try 
 an interactive demo on [binder](https://mybinder.org/v2/gh/JarnoRFB/epysurv/master?filepath=demo.ipynb).
 
 ## Development
