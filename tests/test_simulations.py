@@ -1,8 +1,10 @@
+import inspect
+
 import pandas as pd
 import pytest
 from pandas.testing import assert_frame_equal
 
-from epysurv.simulation import PointSource, SeasonalNoise
+from epysurv.simulation import PointSource, SeasonalNoisePoisson, SeasonalNoiseNBinom
 
 
 def load_simulations(filepath):
@@ -12,18 +14,25 @@ def load_simulations(filepath):
     return simulations
 
 
-@pytest.mark.parametrize("SimulationAlgo", [PointSource, SeasonalNoise])
+@pytest.mark.parametrize(
+    "SimulationAlgo", [PointSource, SeasonalNoisePoisson, SeasonalNoiseNBinom]
+)
 def test_simulate_outbreaks(SimulationAlgo, shared_datadir):
     """Test against changes in simulation behavior."""
     simulation_model = SimulationAlgo(seed=1)
-    simulated = simulation_model.simulate(length=100, state_weight=1)
+    if "state_weight" in inspect.signature(simulation_model.simulate).parameters:
+        simulated = simulation_model.simulate(length=100, state_weight=1)
+    else:
+        simulated = simulation_model.simulate(length=100)
     saved_simulation = load_simulations(
         shared_datadir / f"{SimulationAlgo.__name__}_simulation.csv"
     )
     assert_frame_equal(simulated, saved_simulation)
 
 
-@pytest.mark.parametrize("SimulationAlgo", [PointSource, SeasonalNoise])
+@pytest.mark.parametrize(
+    "SimulationAlgo", [PointSource, SeasonalNoisePoisson, SeasonalNoiseNBinom]
+)
 def test_simulation_model_format(SimulationAlgo):
     simulation_model = SimulationAlgo()
     simulated = simulation_model.simulate(length=1)
