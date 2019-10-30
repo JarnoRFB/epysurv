@@ -3,10 +3,9 @@ from typing import Optional, Sequence
 
 import pandas as pd
 import rpy2.robjects.packages as rpackages
-from rpy2 import robjects
-
 from epysurv.simulation.base import BaseSimulation
 from epysurv.simulation.utils import add_date_time_index_to_frame, r_list_to_frame
+from rpy2 import robjects
 
 surveillance = rpackages.importr("surveillance")
 base = rpackages.importr("base")

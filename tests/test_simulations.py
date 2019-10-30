@@ -2,9 +2,8 @@ import inspect
 
 import pandas as pd
 import pytest
+from epysurv.simulation import PointSource, SeasonalNoiseNBinom, SeasonalNoisePoisson
 from pandas.testing import assert_frame_equal
-
-from epysurv.simulation import PointSource, SeasonalNoisePoisson, SeasonalNoiseNBinom
 
 
 def load_simulations(filepath):

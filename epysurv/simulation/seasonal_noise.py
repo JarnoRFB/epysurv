@@ -4,11 +4,10 @@ from typing import Optional, Sequence
 import numpy as np
 import pandas as pd
 import rpy2.robjects.packages as rpackages
-from rpy2 import robjects
-from scipy.stats import poisson, nbinom
-
 from epysurv.simulation.base import BaseSimulation
 from epysurv.simulation.utils import add_date_time_index_to_frame, r_list_to_frame
+from rpy2 import robjects
+from scipy.stats import nbinom, poisson
 
 surveillance = rpackages.importr("surveillance")
 
@@ -101,18 +100,18 @@ class SeasonalNoisePoisson(BaseSimulation):
 
 @dataclass
 class SeasonalNoiseNBinom(BaseSimulation):
-    r"""A time series simulation that generates case counts based on a negative binomial model (of mean :math:`\mu` and
-    variance :math:`\phi * \mu`), a linear predictor including trend and seasonality determined by Fourier terms.
+    r"""A time series simulation that generates case counts based on a negative binomial model.
 
-    The :math:`\mu` of the model is depended on the current week and is defined as follows:
+    The model is described by a mean :math:`\mu`, variance :math:`\phi * \mu`, a linear predictor including trend
+    and seasonality determined by Fourier terms. The :math:`\mu` of the model is depended on the current week and
+    is defined as follows:
 
     :math:`\mu(t) = \exp \left\{ \theta + \beta t +
     \sum_{j=1}^{m} \left\{ \gamma_{1} \cos (\frac{2\pi j t}{52})
     + \gamma_{2} \sin (\frac{2\pi j t}{52}) \right\} \right\}`
 
-    where :math:`t` is the current week, :math:`m` the seasonality length.
-
-    The simulation is then run using this :math:`\mu` and the dispersion parameter :math:`psi` to specify the
+    where :math:`t` is the current week, :math:`m` the seasonality length. The simulation is then run using
+    this :math:`\mu` and the dispersion parameter :math:`psi` to specify the
     negative binomial model we draw case counts from.
 
     Parameter
@@ -140,6 +139,7 @@ class SeasonalNoiseNBinom(BaseSimulation):
     An improved algorithm for outbreak detection in multiple surveillance system
     https://doi.org/10.1002/sim.5595
     """
+
     beta: float = 0.003
     gamma_1: float = 0.2
     gamma_2: float = -0.4
@@ -149,10 +149,10 @@ class SeasonalNoiseNBinom(BaseSimulation):
     theta: float = 1.5
 
     def _seasonality(self, week: int):
-        """A Fourier-based seasonality term to model the season-depended case counts
+        """A Fourier-based seasonality term to model the season-depended case counts.
 
         Parameter
-        ----------
+        ---------
         week
             The week to model the season-based case count
         """
@@ -165,9 +165,10 @@ class SeasonalNoiseNBinom(BaseSimulation):
         )
 
     def simulate(self, length: int) -> pd.DataFrame:
-        """
-        Parameters
-        -------
+        """Simulate outbreaks.
+
+        Parameter
+        ---------
         length
             number of weeks to model, default 100.
 
