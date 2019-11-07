@@ -2,7 +2,11 @@ import inspect
 
 import pandas as pd
 import pytest
-from epysurv.simulation import PointSource, SeasonalNoiseNBinom, SeasonalNoisePoisson
+from epysurv.simulation import (
+    PointSource,
+    SeasonalNoiseNegativeBinomial,
+    SeasonalNoisePoisson,
+)
 from pandas.testing import assert_frame_equal
 
 
@@ -14,7 +18,7 @@ def load_simulations(filepath):
 
 
 @pytest.mark.parametrize(
-    "SimulationAlgo", [PointSource, SeasonalNoisePoisson, SeasonalNoiseNBinom]
+    "SimulationAlgo", [PointSource, SeasonalNoisePoisson, SeasonalNoiseNegativeBinomial]
 )
 def test_simulate_outbreaks(SimulationAlgo, shared_datadir):
     """Test against changes in simulation behavior."""
@@ -30,10 +34,15 @@ def test_simulate_outbreaks(SimulationAlgo, shared_datadir):
 
 
 @pytest.mark.parametrize(
-    "SimulationAlgo", [PointSource, SeasonalNoisePoisson, SeasonalNoiseNBinom]
+    "SimulationAlgo", [PointSource, SeasonalNoisePoisson, SeasonalNoiseNegativeBinomial]
 )
 def test_simulation_model_format(SimulationAlgo):
     simulation_model = SimulationAlgo()
     simulated = simulation_model.simulate(length=1)
     assert "n_cases" in simulated.columns
     assert "n_outbreak_cases" in simulated.columns
+
+
+def test_seasonality():
+    snnb = SeasonalNoiseNegativeBinomial()
+    assert snnb._seasonality(1) == 0.15032710271748156
