@@ -94,7 +94,7 @@ class SeasonalNoisePoisson(BaseSimulation):
         simulated = (
             simulated.pipe(add_date_time_index_to_frame)
             .rename(columns={"mu": "mean", "seasonalBackground": "n_cases"})
-            .assign(n_outbreak_cases=0)
+            .assign(n_outbreak_cases=np.nan)
         )
         return simulated
 
@@ -158,12 +158,10 @@ class SeasonalNoiseNegativeBinomial(BaseSimulation):
         week
             The week to model the season-based case count.
         """
-        return sum(
-            [
-                self.seasonality_cos * np.cos((2 * np.pi * year * week) / 52)
-                + self.seasonality_sin * np.sin((2 * np.pi * year * week) / 52)
-                for year in range(1, self.seasonality_length + 1)
-            ]
+        years = np.arange(1, self.seasonality_length + 1)
+        return np.sum(
+            self.seasonality_cos * np.cos((2 * np.pi * years * week) / 52)
+            + self.seasonality_sin * np.sin((2 * np.pi * years * week) / 52)
         )
 
     def simulate(self, length: int) -> pd.DataFrame:
@@ -196,4 +194,9 @@ class SeasonalNoiseNegativeBinomial(BaseSimulation):
                 r = np.float(mu / (self.dispersion - 1))
                 p = r / (r + mu)
                 cases.append(nbinom.rvs(r, p, size=1)[0])
-        return pd.DataFrame({"n_cases": cases, "n_outbreak_cases": [0] * len(cases)})
+        return (
+            pd.DataFrame({"n_cases": cases})
+            .pipe(add_date_time_index_to_frame)
+            .assign(timestep=list(range(1, length + 1)))
+            .assign(n_outbreak_cases=np.nan)
+        )
