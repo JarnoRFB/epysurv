@@ -95,6 +95,12 @@ def test_output_format(train_data, test_data):
     assert set(test_data.columns) == (set(prediction.columns) - {"alarm"})
 
 
+def test_validate_data_on_fit(train_data):
+    model = EarsC1()
+    with pytest.raises(ValueError):
+        model.fit(train_data.rename(columns={"n_cases": "wrong_column_name"}))
+
+
 @pytest.mark.parametrize("Algo", algos_to_test)
 def test_prediction_witout_labels(train_data, test_data, shared_datadir, Algo):
     """Test only works, because sample data contains no outbreaks in the training set."""
