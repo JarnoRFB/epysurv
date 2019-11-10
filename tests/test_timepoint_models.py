@@ -93,3 +93,14 @@ def test_output_format(train_data, test_data):
     original_test_data = test_data.copy()
     prediction = model.fit(train_data).predict(test_data)
     assert set(test_data.columns) == (set(prediction.columns) - {"alarm"})
+
+
+@pytest.mark.parametrize("Algo", algos_to_test)
+def test_prediction_witout_labels(train_data, test_data, shared_datadir, Algo):
+    """Test only works, because sample data contains no outbreaks in the training set."""
+    model = Algo()
+    with pytest.warns(UserWarning):
+        model.fit(train_data[["n_cases"]])
+    pred = model.predict(test_data)
+    saved_predictions = load_predictions(shared_datadir / f"{Algo.__name__}_pred.csv")
+    assert_frame_equal(pred, saved_predictions)

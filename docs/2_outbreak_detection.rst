@@ -88,8 +88,8 @@ distribution, evidence that observed case counts do originate from an epidemic i
 until a certain threshold is exceeded and an alarm is raised. Then the sum
 is reset.
 
-Cusum-based approaches include the Cusum :cite:`Rossi1999`, 
-generalized likelihood ratio methods based on Poisson:cite:`Hohle2006` 
+Cusum-based approaches include the Cusum :cite:`Rossi1999`,
+generalized likelihood ratio methods based on Poisson:cite:`Hohle2006`
 or negative binomial distributions~\cite{Hohle2008} and
 the OutbreakP method :cite:`Frisen2009`.
 

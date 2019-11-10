@@ -46,7 +46,7 @@ class GLRNegativeBinomial(STSBasedAlgorithm):
         - ("dec",) only decreases are regarded
         - ("inc", "dec") both increases and decreases are regarded.
     upperbound_statistic
-        a string specifying the type of upperbound-statistic that is returned.
+        A string specifying the type of upperbound-statistic that is returned.
         With "cases" the number of cases that would have been necessary
         to produce an alarm or with "value" the GLR-statistic is computed.
     x_max
