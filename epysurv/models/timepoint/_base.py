@@ -120,7 +120,7 @@ class SurveillanceRPackageAlgorithm(TimepointSurveillanceAlgorithm):
             np.where(full_data.provenance == "test")[0] + 1
         )
         surveillance_result = self._call_surveillance_algo(r_instance, detection_range)
-        return data.assign(alarm=self._extract_alarms(surveillance_result).astype(int))
+        return data.assign(alarm=self._extract_alarms(surveillance_result).astype(bool))
 
     def _None_to_NULL(self, obj):  # NOQA
         return robjects.NULL if obj is None else obj
