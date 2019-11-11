@@ -16,28 +16,27 @@ class PointSource(BaseSimulation):
     r"""Simulation of epidemics which were introduced by point sources.
 
     The basis of this programme is a combination of a Hidden Markov Model
-    (to get random timepoints for outbreaks) and a simple model
+    (to get random time points for outbreaks) and a simple model
     (compare :class:`epysurv.simulation.SeasonalNoise`) to simulate the baseline.
 
     Parameters
     ----------
     amplitude
-        amplitude (range of sinus).
+        Amplitude of the sine. Determines the possible range of simulated seasonal cases.
     alpha
-        parameter to move along the y-axis (negative values are not allowed) with `alpha` >= `amplitude`.
+        Parameter to move along the y-axis (negative values are not allowed) with `alpha` >= `amplitude`.
     frequency
-        factor to determine the oscillation-frequency.
+        Factor in oscillation term. Is multiplied with the annual term :math:`\omega` and the current time point.
     p
-       probability to get a new outbreak at time :math:`i` if there was one at time :math:`i-1`.
+        Probability to get a new outbreak at time :math:`t` if there was one at time :math:`t-1`.
     r
-        probability to get no new outbreak at time :math:`i` if there was none at time :math:`i-1`.
-    seasonal_moves
-       seasonal moves (moves the curve along the x-axis).
-
+        Probability to get no new outbreak at time :math:`t` if there was none at time :math:`t-1`.
+    seasonal_move
+        A term added to time point :math:`t` to move the curve along the x-axis.
     seed
-        a seed for the random number generation
-    trend_parameter
-        trend parameter that controls the influence of the current week on :math:`\mu`.
+        Seed for the random number generation.
+    trend
+        Controls the influence of the current week on :math:`\mu`.
 
     References
     ----------
@@ -49,9 +48,9 @@ class PointSource(BaseSimulation):
     frequency: int = 1
     p: float = 0.99
     r: float = 0.01
-    seasonal_moves: int = 0
+    seasonal_move: int = 0
     seed: Optional[int] = None
-    trend_parameter: float = 0.0
+    trend: float = 0.0
 
     def simulate(
         self,
@@ -64,13 +63,13 @@ class PointSource(BaseSimulation):
         Parameters
         ----------
         length
-            number of weeks to model. ``length`` is ignored if ``state`` is given. In this case the length of
+            Number of weeks to model. ``length`` is ignored if ``state`` is given. In this case, the length of
             ``state`` is used.
         state
-            use a state chain to define the status at this timepoint (outbreak or not). If not given, a Markov chain is
+            Use a state chain to define the status at this time point (outbreak or not). If not given, a Markov chain is
             generated automatically.
         state_weight
-            additional weight for an outbreak which influences the distribution parameter mu.
+            Additional weight for an outbreak which influences the distribution parameter mu.
 
         Returns
         -------
@@ -84,8 +83,8 @@ class PointSource(BaseSimulation):
             length=length,
             A=self.amplitude,
             alpha=self.alpha,
-            beta=self.trend_parameter,
-            phi=self.seasonal_moves,
+            beta=self.trend,
+            phi=self.seasonal_move,
             frequency=self.frequency,
             state=robjects.NULL if state is None else robjects.IntVector(state),
             K=state_weight,

@@ -27,17 +27,17 @@ class SeasonalNoisePoisson(BaseSimulation):
     Parameters
     ----------
     amplitude
-        amplitude (range of sinus).
+        Amplitude of the sine. Determines the range of simulated cases.
     alpha
-        parameter to move along the y-axis (negative values not allowed) with `alpha` >= `amplitude`.
+        Parameter to move simulation along the y-axis (negative values are not allowed) with `alpha` >= `amplitude`.
     frequency
-        factor to determine the oscillation-frequency
-    seasonal_moves
-        seasonal moves (moves the curve along the x-axis).
+        Factor in oscillation term. Is multiplied with the annual term :math:`\omega` and the current time point.
+    seasonal_move
+        A term added to each time point :math:`t` to move the curve along the x-axis.
     seed
-        a seed for the random number generation.
-    trend_parameter
-        trend parameter that controls the influence of the current week on :math:`\mu`.
+        Seed for the random number generation.
+    trend
+        Controls the influence of the current week on :math:`\mu`.
 
     References
     ----------
@@ -47,9 +47,9 @@ class SeasonalNoisePoisson(BaseSimulation):
     alpha: float = 1.0
     amplitude: float = 1.0
     frequency: int = 1
-    seasonal_moves: int = 0
+    seasonal_move: int = 0
     seed: Optional[int] = None
-    trend_parameter: float = 0.0
+    trend: float = 0.0
 
     def simulate(
         self,
@@ -57,24 +57,24 @@ class SeasonalNoisePoisson(BaseSimulation):
         state_weight: Optional[float] = None,
         state: Optional[Sequence[int]] = None,
     ) -> pd.DataFrame:
-        """
+        r"""
         Simulate outbreaks.
 
         Parameters
         ----------
         length
-            number of weeks to model. ``length`` is ignored if ``state`` is given. In this case the length of ``state``
+            Number of weeks to model. ``length`` is ignored if ``state`` is given. In this case the length of ``state``
             is used.
         state
-            use a state chain to define the status at this time point (outbreak or not). If not given, a Markov chain is
+            Use a state chain to define the status at this time point (outbreak or not). If not given, a Markov chain is
             generated automatically.
         state_weight
-            additional weight for an outbreak which influences the distribution parameter mu.
+            Additional weight for an outbreak which influences the distribution parameter :math:`\mu`.
 
         Returns
         -------
             A ``DataFrame`` of an endemic time series where each row contains the case counts of this week.
-            It also contains the mean case count value based on the underlying sinus model
+            It also contains the mean case count value based on the underlying sinus model.
         """
         if self.seed:
             base = robjects.packages.importr("base")
@@ -82,8 +82,8 @@ class SeasonalNoisePoisson(BaseSimulation):
         simulated = surveillance.sim_seasonalNoise(
             A=self.amplitude,
             alpha=self.alpha,
-            beta=self.trend_parameter,
-            phi=self.seasonal_moves,
+            beta=self.trend,
+            phi=self.seasonal_move,
             length=length,
             frequency=self.frequency,
             state=robjects.NULL if state is None else robjects.IntVector(state),
@@ -120,26 +120,26 @@ class SeasonalNoiseNegativeBinomial(BaseSimulation):
     Parameters
     ----------
     baseline_frequency
-        baseline frequency of cases.
+        Baseline frequency of cases.
     dispersion
-        dispersion parameter that regulates the overdispersion compared to the Poisson distribution
-        (:math:`\phi \cdot \mu`)
+        Regulates the overdispersion compared to the Poisson distribution (:math:`\phi \cdot \mu`).
     seasonality_cos
-        seasonality parameter to model :math:`\cos` of the Fourier term.
+        Seasonality parameter to model :math:`\cos` of the Fourier term.
     seasonality_sin
         seasonality parameter to model :math:`\sin` of the Fourier term.
     seasonality_length
-        models the annual-wise seasonality. 0 equals to no seasonality, 1 to annual seasonality, 2 to
+        Models the annual-wise seasonality. 0 equals to no seasonality, 1 to annual seasonality, 2 to
         biannual seasonality and so forth.
     seed
-        a seed for the random number generation.
-    trend_parameter
-        trend parameter that controls the influence of the current week on :math:`\mu`.
+        A seed for the random number generation.
+    trend
+        Controls the influence of the current week on :math:`\mu`.
 
     References
     ----------
-        An improved algorithm for outbreak detection in multiple surveillance system
-        https://doi.org/10.1002/sim.5595
+    .. [1] Noufaily, A., Enki, D.G., Farrington, C.P., Garthwaite, P., Andrews, N.J., Charlett, A. (2012): An
+        improved algorithm for outbreak detection in multiple surveillance systems. Statistics in Medicine,
+        32 (7), 1206-1222.
     """
 
     baseline_frequency: float = 1.5
@@ -148,7 +148,7 @@ class SeasonalNoiseNegativeBinomial(BaseSimulation):
     seasonality_sin: float = -0.4
     seasonality_length: int = 1
     seed: Optional[int] = None
-    trend_parameter: float = 0.003
+    trend: float = 0.003
 
     def _seasonality(self, week: int):
         """A Fourier-based seasonality term to model the season-depended case counts.
@@ -170,7 +170,7 @@ class SeasonalNoiseNegativeBinomial(BaseSimulation):
         Parameter
         ---------
         length
-            number of weeks to model.
+            Number of weeks to model.
 
         Returns
         -------
@@ -180,9 +180,7 @@ class SeasonalNoiseNegativeBinomial(BaseSimulation):
             np.random.seed(self.seed)
         mu_s = [
             np.exp(
-                self.baseline_frequency
-                + self.trend_parameter * week
-                + self._seasonality(week)
+                self.baseline_frequency + self.trend * week + self._seasonality(week)
             )
             for week in range(length)
         ]
