@@ -103,7 +103,7 @@ def test_validate_data_on_fit(train_data):
 
 @pytest.mark.parametrize("Algo", algos_to_test)
 def test_prediction_witout_labels(train_data, test_data, shared_datadir, Algo):
-    """Test only works, because sample data contains no outbreaks in the training set."""
+    """Test only works with same data as `test_prediction`, because sample data contains no outbreaks in the training set."""
     model = Algo()
     with pytest.warns(UserWarning):
         model.fit(train_data[["n_cases"]])

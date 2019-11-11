@@ -45,7 +45,7 @@ time series, i.e. the time series without outbreaks.
 If you do not have any labeled outbreak data, but just the raw
 counts ``epysurv`` implicitly adds the ``n_outbreak_cases`` column filled
 with zeros under the assumption that your data is in fact
-*in control* data. A waring is still issued in this case.
+*in control* data. A warning is still issued in this case.
 
 Prediction
 ----------

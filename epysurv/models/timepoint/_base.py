@@ -41,16 +41,17 @@ class TimepointSurveillanceAlgorithm:
         data = data.copy()
         if "n_outbreak_cases" in data.columns:
             # Remove outbreaks cases from baseline.
-            data.n_cases -= data["n_outbreak_cases"]
+            data["n_cases"] -= data["n_outbreak_cases"]
         else:
             warnings.warn(
-                'The column "n_outbreak_cases" is not present in `data`. "n_cases" is treated as if it contains no outbreaks.'
+                'The column "n_outbreak_cases" is not present in input parameter `data`. '
+                '"n_cases" is treated as if it contains no outbreaks.'
             )
 
         self._training_data = data
         return self
 
-    def predict(self, data: pd.DataFrame):
+    def predict(self, data: pd.DataFrame) -> pd.DataFrame:
         """Expects data with time series index and case counts."""
         self._data_in_the_future(data)
 
@@ -116,7 +117,7 @@ class SurveillanceRPackageAlgorithm(TimepointSurveillanceAlgorithm):
             Original dataframe with "alarm" column added.
         """
         super().predict(data)
-        # Concat training and prediction data. make index array for range param.
+        # Concat training and prediction data. Make index array for range param.
         full_data = (
             pd.concat((self._training_data, data), keys=["train", "test"], sort=True)
             .reset_index(level=0)

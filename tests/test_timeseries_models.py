@@ -1,6 +1,5 @@
 import numpy as np
 import pandas as pd
-import pytest
 
 from epysurv.models.timeseries import Farrington, GLRPoisson  # type: ignore
 
