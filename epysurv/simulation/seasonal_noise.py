@@ -91,10 +91,8 @@ class SeasonalNoisePoisson(BaseSimulation):
         )
 
         simulated = r_list_to_frame(simulated, ["mu", "seasonalBackground"])
-        simulated = (
-            simulated.pipe(add_date_time_index_to_frame)
-            .rename(columns={"mu": "mean", "seasonalBackground": "n_cases"})
-            .assign(n_outbreak_cases=np.nan)
+        simulated = simulated.pipe(add_date_time_index_to_frame).rename(
+            columns={"mu": "mean", "seasonalBackground": "n_cases"}
         )
         return simulated
 
@@ -196,5 +194,4 @@ class SeasonalNoiseNegativeBinomial(BaseSimulation):
             pd.DataFrame({"n_cases": cases})
             .pipe(add_date_time_index_to_frame)
             .assign(timestep=list(range(1, length + 1)))
-            .assign(n_outbreak_cases=np.nan)
         )

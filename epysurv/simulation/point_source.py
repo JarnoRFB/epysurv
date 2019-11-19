@@ -94,5 +94,7 @@ class PointSource(BaseSimulation):
         return (
             simulated_as_frame.pipe(add_date_time_index_to_frame)
             .rename(columns={"observed": "n_cases", "state": "is_outbreak"})
-            .assign(n_outbreak_cases=lambda df: df["n_cases"] * df["is_outbreak"])
+            .assign(
+                n_outbreak_cases=lambda df: df["n_cases"] * df["is_outbreak"]
+            )  # TODO: Improve this calculation
         )
