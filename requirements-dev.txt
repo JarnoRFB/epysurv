@@ -1,9 +1,10 @@
 -r requirements.txt
+sklearn
 pytest
 pytest-datadir
 pytest-cov
 codecov
-black
+black==19.10b0
 mypy
 flake8
 pep8-naming

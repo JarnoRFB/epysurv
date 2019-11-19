@@ -16,23 +16,17 @@ TSCGenerator = namedtuple("TSCGenerator", "train_gen test_gen")
 
 @pytest.fixture
 def train_data(shared_datadir):
-    data = pd.read_csv(
-        shared_datadir / "salmonella_train.csv",
-        index_col=0,
-        parse_dates=True,
-        infer_datetime_format=True,
-    )
-    data.index.freq = pd.infer_freq(data.index)
-    return data
+    return _load_data(shared_datadir / "salmonella_train.csv")
 
 
 @pytest.fixture
 def test_data(shared_datadir):
+    return _load_data(shared_datadir / "salmonella_test.csv")
+
+
+def _load_data(filepath):
     data = pd.read_csv(
-        shared_datadir / "salmonella_test.csv",
-        index_col=0,
-        parse_dates=True,
-        infer_datetime_format=True,
+        filepath, index_col=0, parse_dates=True, infer_datetime_format=True,
     )
     data.index.freq = pd.infer_freq(data.index)
     return data
