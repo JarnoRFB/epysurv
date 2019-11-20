@@ -1,4 +1,5 @@
 import platform
+import warnings
 from dataclasses import dataclass, field
 
 import numpy as np
@@ -36,13 +37,21 @@ class TimepointSurveillanceAlgorithm:
 
     def fit(self, data: pd.DataFrame) -> "TimepointSurveillanceAlgorithm":
         """Expects data with time series index, case counts and outbreak labels."""
-        # Remove outbreaks cases from baseline.
+        self._validate_data(data)
         data = data.copy()
-        data.n_cases -= data.n_outbreak_cases
+        if "n_outbreak_cases" in data.columns:
+            # Remove outbreaks cases from baseline.
+            data["n_cases"] -= data["n_outbreak_cases"]
+        else:
+            warnings.warn(
+                'The column "n_outbreak_cases" is not present in input parameter `data`. '
+                '"n_cases" is treated as if it contains no outbreaks.'
+            )
+
         self._training_data = data
         return self
 
-    def predict(self, data: pd.DataFrame):
+    def predict(self, data: pd.DataFrame) -> pd.DataFrame:
         """Expects data with time series index and case counts."""
         self._data_in_the_future(data)
 
@@ -55,13 +64,13 @@ class TimepointSurveillanceAlgorithm:
         self._contains_counts(data)
 
     def _contains_dates(self, data: pd.DataFrame):
-        has_dates = "ds" in data.columns or isinstance(data.index, pd.DatetimeIndex)
+        has_dates = isinstance(data.index, pd.DatetimeIndex)
         if not has_dates:
-            raise ValueError("No dates")
+            raise ValueError("`data` needs to have a datetime index.")
 
     def _contains_counts(self, data: pd.DataFrame):
-        if not {"n_cases", "n_outbreak_cases"} < set(data.columns):
-            raise ValueError('No column named "n_cases"')
+        if "n_cases" not in data.columns:
+            raise ValueError('No column named "n_cases" in `data`')
 
     def _data_in_the_future(self, data: pd.DataFrame):
         if data.index.min() <= self._training_data.index.max():
@@ -108,9 +117,9 @@ class SurveillanceRPackageAlgorithm(TimepointSurveillanceAlgorithm):
             Original dataframe with "alarm" column added.
         """
         super().predict(data)
-        # Concat training and prediction data. make index array for range param.
+        # Concat training and prediction data. Make index array for range param.
         full_data = (
-            pd.concat((self._training_data, data), keys=["train", "test"])
+            pd.concat((self._training_data, data), keys=["train", "test"], sort=True)
             .reset_index(level=0)
             .rename(columns={"level_0": "provenance"})
         )
@@ -148,7 +157,7 @@ class STSBasedAlgorithm(SurveillanceRPackageAlgorithm):
                     f"The time series index has no valid frequency. Index={data.index}"
                 )
             data.index.freq = freq
-        print("input", r.c(data.index[0].year, _get_start_epoch(data)))
+
         sts = surveillance.sts(
             start=r.c(data.index[0].year, _get_start_epoch(data)),
             epoch=robjects.IntVector(
