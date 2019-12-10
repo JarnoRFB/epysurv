@@ -45,7 +45,7 @@ an interactive demo on [binder](https://mybinder.org/v2/gh/JarnoRFB/epysurv/mast
 ## Development
 To set up a local development environment, run
 
-    conda env create -f eny.yml
+    conda env create -f env.yml
     conda activate epysurv-dev
     pip install -r requirements-dev.txt
     pre-commit install 
