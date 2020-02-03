@@ -3,9 +3,10 @@ from typing import Optional, Sequence
 
 import pandas as pd
 import rpy2.robjects.packages as rpackages
+from rpy2 import robjects
+
 from epysurv.simulation.base import BaseSimulation
 from epysurv.simulation.utils import add_date_time_index_to_frame, r_list_to_frame
-from rpy2 import robjects
 
 surveillance = rpackages.importr("surveillance")
 base = rpackages.importr("base")
@@ -91,10 +92,6 @@ class PointSource(BaseSimulation):
         )
 
         simulated_as_frame = r_list_to_frame(simulated, ["observed", "state"])
-        return (
-            simulated_as_frame.pipe(add_date_time_index_to_frame)
-            .rename(columns={"observed": "n_cases", "state": "is_outbreak"})
-            .assign(
-                n_outbreak_cases=lambda df: df["n_cases"] * df["is_outbreak"]
-            )  # TODO: Improve this calculation
+        return simulated_as_frame.pipe(add_date_time_index_to_frame).rename(
+            columns={"observed": "n_cases", "state": "is_outbreak"}
         )

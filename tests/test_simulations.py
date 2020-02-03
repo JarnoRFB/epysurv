@@ -2,12 +2,13 @@ import inspect
 
 import pandas as pd
 import pytest
+from pandas.testing import assert_frame_equal
+
 from epysurv.simulation import (
     PointSource,
     SeasonalNoiseNegativeBinomial,
     SeasonalNoisePoisson,
 )
-from pandas.testing import assert_frame_equal
 
 
 def load_simulations(filepath):
@@ -40,8 +41,6 @@ def test_simulation_model_format(SimulationAlgo):
     simulation_model = SimulationAlgo()
     simulated = simulation_model.simulate(length=1)
     assert "n_cases" in simulated.columns
-    if SimulationAlgo.__name__ == "PointSource":
-        assert "n_outbreak_cases" in simulated.columns
 
 
 def test_seasonality():
