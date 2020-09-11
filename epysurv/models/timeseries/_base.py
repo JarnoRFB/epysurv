@@ -21,4 +21,6 @@ class NonLearningTimeseriesClassificationMixin:
             [time] = prediction.index
             alarms.append(alarm)
             times.append(time)
-        return pd.DataFrame({"alarm": alarms}, index=pd.DatetimeIndex(times))
+        return pd.DataFrame(
+            {"alarm": alarms}, index=pd.DatetimeIndex(times, freq="infer")
+        )

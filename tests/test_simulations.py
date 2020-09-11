@@ -10,12 +10,7 @@ from epysurv.simulation import (
     SeasonalNoisePoisson,
 )
 
-
-def load_simulations(filepath):
-    simulations = pd.read_csv(
-        filepath, index_col=0, parse_dates=True, infer_datetime_format=True
-    )
-    return simulations
+from .utils import load_simulations
 
 
 @pytest.mark.parametrize(
