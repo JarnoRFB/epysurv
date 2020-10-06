@@ -108,3 +108,6 @@ venv.bak/
 
 # Git credentials
 .git-credentials
+
+# Visual Studio Code
+.vscode
