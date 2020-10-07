@@ -1,3 +1,5 @@
+.. _outbreak-detection-formalization:
+
 Outbreak Detection
 ==================
 Surveillance algorithms usually work on regular spaced aggregated time series of case counts.
