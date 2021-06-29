@@ -7,20 +7,32 @@ class NonLearningTimeseriesClassificationMixin:
         """These types of algorithms do not learn from previous time series."""
         pass
 
-    def predict(self, data_generator) -> pd.DataFrame:
+    def predict(self, data_generator, get_alarm_only : bool = True) -> pd.DataFrame:
         alarms = []
+        upperbounds = []
         times = []
         for x, _ in data_generator:
             # Fit on all data, except the last point, that is to be predicted.
             super().fit(x.iloc[:-1])
             prediction = super().predict(
-                x.iloc[[-1]]
+                x.iloc[[-1]],
+                get_alarm_only
             )  # Use inner brackets to get dytpe preserving frame and not series.
             # As only a single value should be returned, we can access this single item.
             [alarm] = prediction.alarm
             [time] = prediction.index
+
+            if not get_alarm_only and hasattr(prediction, 'upperbound'):
+                [upperbound] = prediction.upperbound
+                upperbounds.append(upperbound)
+
             alarms.append(alarm)
             times.append(time)
+
+        frame_dict = {"alarm": alarms}
+        if len(upperbounds) > 0:
+            frame_dict['upperbound'] = upperbounds
+
         return pd.DataFrame(
-            {"alarm": alarms}, index=pd.DatetimeIndex(times, freq="infer")
+            frame_dict, index=pd.DatetimeIndex(times, freq="infer")
         )

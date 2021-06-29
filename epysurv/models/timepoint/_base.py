@@ -103,7 +103,7 @@ def _get_start_epoch(data: pd.DataFrame) -> int:
 class SurveillanceRPackageAlgorithm(TimepointSurveillanceAlgorithm):
     """Base class for the algorithm from the R package surveillance."""
 
-    def predict(self, data: pd.DataFrame) -> pd.DataFrame:
+    def predict(self, data: pd.DataFrame, get_alarm_only : bool = True) -> pd.DataFrame:
         """
         Predict outbreaks.
 
@@ -112,9 +112,12 @@ class SurveillanceRPackageAlgorithm(TimepointSurveillanceAlgorithm):
         data
             Dataframe with DateTimeIndex containing the columns "n_cases".
 
+        get_alarm_only
+            Gets alarm column only when True; when False, all other columns will be made available
+
         Returns
         -------
-            Original dataframe with "alarm" column added.
+            Original dataframe with requested column(s) added.
         """
         super().predict(data)
         # Concat training and prediction data. Make index array for range param.
@@ -129,7 +132,24 @@ class SurveillanceRPackageAlgorithm(TimepointSurveillanceAlgorithm):
             np.where(full_data.provenance == "test")[0] + 1
         )
         surveillance_result = self._call_surveillance_algo(r_instance, detection_range)
-        return data.assign(alarm=self._extract_alarms(surveillance_result).astype(bool))
+
+        predict_df = None
+        if get_alarm_only:
+            predict_df = data.assign(alarm=self._extract_slot(surveillance_result, 'alarm').astype(bool))
+        else:
+            slot_keys = set()
+            if hasattr(surveillance_result, 'slotnames'):
+                slot_keys = set(surveillance_result.slotnames())
+            elif hasattr(surveillance_result, 'names'):
+                slot_keys = set(surveillance_result.names)
+
+            data = data.assign(alarm=self._extract_slot(surveillance_result, 'alarm').astype(bool))
+            if 'upperbound' in slot_keys:
+                data = data.assign(upperbound=self._extract_slot(surveillance_result, 'upperbound').astype(float))
+
+            predict_df = data
+
+        return predict_df
 
     def _None_to_NULL(self, obj):  # NOQA
         return robjects.NULL if obj is None else obj
@@ -138,8 +158,8 @@ class SurveillanceRPackageAlgorithm(TimepointSurveillanceAlgorithm):
         """Transform dataframe into R data structure on which the R algorithm can work."""
         raise NotImplementedError
 
-    def _extract_alarms(self, surveillance_result) -> np.array:
-        """Extract the binary alarm array from the surveillance result R data structure."""
+    def _extract_slot(self, surveillance_result, slot_name) -> np.array:
+        """Extract the array for the requested slow name from the surveillance result R data structure."""
         raise NotImplementedError
 
     def _call_surveillance_algo(self, sts, detection_range) -> pd.DataFrame:
@@ -173,8 +193,8 @@ class STSBasedAlgorithm(SurveillanceRPackageAlgorithm):
         )
         return sts
 
-    def _extract_alarms(self, surveillance_result):
-        return np.asarray(surveillance_result.slots["alarm"])
+    def _extract_slot(self, surveillance_result, slot_name):
+        return np.asarray(surveillance_result.slots[slot_name])
 
 
 class DisProgBasedAlgorithm(STSBasedAlgorithm):
@@ -184,7 +204,7 @@ class DisProgBasedAlgorithm(STSBasedAlgorithm):
         sts = super()._prepare_r_instance(data)
         return surveillance.sts2disProg(sts)
 
-    def _extract_alarms(self, surveillance_result):
+    def _extract_slot(self, surveillance_result, slot_name):
         return np.asarray(
-            dict(zip(surveillance_result.names, list(surveillance_result)))["alarm"]
+            dict(zip(surveillance_result.names, list(surveillance_result)))[slot_name]
         )
