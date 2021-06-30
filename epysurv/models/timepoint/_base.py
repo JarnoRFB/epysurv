@@ -138,7 +138,7 @@ class SurveillanceRPackageAlgorithm(TimepointSurveillanceAlgorithm):
         """Transform dataframe into R data structure on which the R algorithm can work."""
         raise NotImplementedError
 
-    def _extract_alarms(self, surveillance_result) -> np.array:
+    def _extract_alarms(self, surveillance_result) -> np.ndarray:
         """Extract the binary alarm array from the surveillance result R data structure."""
         raise NotImplementedError
 
