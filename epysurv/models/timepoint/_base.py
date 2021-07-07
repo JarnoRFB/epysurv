@@ -151,7 +151,7 @@ class SurveillanceRPackageAlgorithm(TimepointSurveillanceAlgorithm):
         raise NotImplementedError
 
     def _extract_slot(self, surveillance_result, slot_name) -> np.array:
-        """Extract the array for the requested slow name from the surveillance result R data structure."""
+        """Extract the array for the requested slot name from the surveillance result R data structure."""
         raise NotImplementedError
 
     def _call_surveillance_algo(self, sts, detection_range) -> pd.DataFrame:
