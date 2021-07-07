@@ -103,7 +103,7 @@ def _get_start_epoch(data: pd.DataFrame) -> int:
 class SurveillanceRPackageAlgorithm(TimepointSurveillanceAlgorithm):
     """Base class for the algorithm from the R package surveillance."""
 
-    def predict(self, data: pd.DataFrame, get_alarm_only : bool = True) -> pd.DataFrame:
+    def predict(self, data: pd.DataFrame) -> pd.DataFrame:
         """
         Predict outbreaks.
 
@@ -112,12 +112,9 @@ class SurveillanceRPackageAlgorithm(TimepointSurveillanceAlgorithm):
         data
             Dataframe with DateTimeIndex containing the columns "n_cases".
 
-        get_alarm_only
-            Gets alarm column only when True; when False, all other columns will be made available
-
         Returns
         -------
-            Original dataframe with requested column(s) added.
+            Original dataframe with "alarm" column and other relevant columns as available (e.g. "upperbound") added.
         """
         super().predict(data)
         # Concat training and prediction data. Make index array for range param.
@@ -132,24 +129,19 @@ class SurveillanceRPackageAlgorithm(TimepointSurveillanceAlgorithm):
             np.where(full_data.provenance == "test")[0] + 1
         )
         surveillance_result = self._call_surveillance_algo(r_instance, detection_range)
+        data.assign(alarm=self._extract_slot(surveillance_result, 'alarm').astype(bool))
 
-        predict_df = None
-        if get_alarm_only:
-            predict_df = data.assign(alarm=self._extract_slot(surveillance_result, 'alarm').astype(bool))
-        else:
-            slot_keys = set()
-            if hasattr(surveillance_result, 'slotnames'):
-                slot_keys = set(surveillance_result.slotnames())
-            elif hasattr(surveillance_result, 'names'):
-                slot_keys = set(surveillance_result.names)
+        # Let's check what other slots were returned
+        slot_keys = set()
+        if hasattr(surveillance_result, 'slotnames'):
+            slot_keys = set(surveillance_result.slotnames())
+        elif hasattr(surveillance_result, 'names'):
+            slot_keys = set(surveillance_result.names)
 
-            data = data.assign(alarm=self._extract_slot(surveillance_result, 'alarm').astype(bool))
-            if 'upperbound' in slot_keys:
-                data = data.assign(upperbound=self._extract_slot(surveillance_result, 'upperbound').astype(float))
+        if 'upperbound' in slot_keys:
+            data.assign(upperbound=self._extract_slot(surveillance_result, 'upperbound').astype(float))
 
-            predict_df = data
-
-        return predict_df
+        return data
 
     def _None_to_NULL(self, obj):  # NOQA
         return robjects.NULL if obj is None else obj
