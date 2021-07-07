@@ -19,7 +19,7 @@ from epysurv.models.timepoint import (
     OutbreakP,
 )
 
-from .utils import load_predictions
+from .utils import load_predictions, drop_column_if_exists
 
 algos_to_test = [
     EarsC1,
@@ -43,7 +43,13 @@ def test_prediction(train_data, test_data, shared_datadir, Algo):
     model = Algo()
     model.fit(train_data)
     pred = model.predict(test_data)
+
     saved_predictions = load_predictions(shared_datadir / f"{Algo.__name__}_pred.csv")
+
+    # 'upperbound' does not make sense to check for equality, so let's remove it if it exists
+    pred = drop_column_if_exists(pred, 'upperbound')
+    saved_predictions = drop_column_if_exists(saved_predictions, 'upperbound')
+
     assert_frame_equal(pred, saved_predictions)
 
 
@@ -62,6 +68,11 @@ def test_long_prediction(train_data, test_data, shared_datadir, Algo):
     model.fit(train_data)
     pred = model.predict(test_data)
     saved_predictions = load_predictions(shared_datadir / f"{Algo.__name__}_pred.csv")
+
+    # 'upperbound' does not make sense to check for equality, so let's remove it if it exists
+    pred = drop_column_if_exists(pred, 'upperbound')
+    saved_predictions = drop_column_if_exists(saved_predictions, 'upperbound')
+
     assert_frame_equal(pred, saved_predictions)
 
 
@@ -86,7 +97,7 @@ def test_output_format(train_data, test_data):
     original_train_data = train_data.copy()
     original_test_data = test_data.copy()
     prediction = model.fit(train_data).predict(test_data)
-    assert set(test_data.columns) == (set(prediction.columns) - {"alarm"})
+    assert set(test_data.columns) == (set(prediction.columns) - {"alarm", "upperbound"})
 
 
 def test_validate_data_on_fit(train_data):
@@ -103,4 +114,9 @@ def test_prediction_witout_labels(train_data, test_data, shared_datadir, Algo):
         model.fit(train_data[["n_cases"]])
     pred = model.predict(test_data)
     saved_predictions = load_predictions(shared_datadir / f"{Algo.__name__}_pred.csv")
+
+    # 'upperbound' does not make sense to check for equality, so let's remove it if it exists
+    pred = drop_column_if_exists(pred, 'upperbound')
+    saved_predictions = drop_column_if_exists(saved_predictions, 'upperbound')
+
     assert_frame_equal(pred, saved_predictions)

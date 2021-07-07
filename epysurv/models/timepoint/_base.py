@@ -129,7 +129,7 @@ class SurveillanceRPackageAlgorithm(TimepointSurveillanceAlgorithm):
             np.where(full_data.provenance == "test")[0] + 1
         )
         surveillance_result = self._call_surveillance_algo(r_instance, detection_range)
-        data.assign(alarm=self._extract_slot(surveillance_result, 'alarm').astype(bool))
+        data = data.assign(alarm=self._extract_slot(surveillance_result, 'alarm').astype(bool))
 
         # Let's check what other slots were returned
         slot_keys = set()
@@ -139,7 +139,7 @@ class SurveillanceRPackageAlgorithm(TimepointSurveillanceAlgorithm):
             slot_keys = set(surveillance_result.names)
 
         if 'upperbound' in slot_keys:
-            data.assign(upperbound=self._extract_slot(surveillance_result, 'upperbound').astype(float))
+            data = data.assign(upperbound=self._extract_slot(surveillance_result, 'upperbound').astype(float))
 
         return data
 
