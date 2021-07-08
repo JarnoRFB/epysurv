@@ -150,7 +150,7 @@ class SurveillanceRPackageAlgorithm(TimepointSurveillanceAlgorithm):
         """Transform dataframe into R data structure on which the R algorithm can work."""
         raise NotImplementedError
 
-    def _extract_slot(self, surveillance_result, slot_name) -> np.array:
+    def _extract_slot(self, surveillance_result, slot_name) -> np.ndarray:
         """Extract the array for the requested slot name from the surveillance result R data structure."""
         raise NotImplementedError
 
