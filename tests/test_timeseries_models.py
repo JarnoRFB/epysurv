@@ -28,11 +28,14 @@ def test_farrington_timeseries_prediction_columns(tsc_generator, shared_datadir)
     pred_columns = list(pred.columns.values)
 
     # this one is always here
-    assert 'alarm' in pred_columns
+    assert "alarm" in pred_columns
     # but this one should be here if we call predict() with get_alarm_only = False
-    assert 'upperbound' in pred_columns
+    assert "upperbound" in pred_columns
 
-def test_farrington_flexible_timeseries_prediction_columns(tsc_generator, shared_datadir):
+
+def test_farrington_flexible_timeseries_prediction_columns(
+    tsc_generator, shared_datadir
+):
     model = FarringtonFlexible()
     model.fit(tsc_generator.train_gen)
     pred = model.predict(tsc_generator.test_gen)
@@ -41,9 +44,10 @@ def test_farrington_flexible_timeseries_prediction_columns(tsc_generator, shared
     pred_columns = list(pred.columns.values)
 
     # this one is always here
-    assert 'alarm' in pred_columns
+    assert "alarm" in pred_columns
     # but this one should be here if we call predict() with get_alarm_only = False
-    assert 'upperbound' in pred_columns
+    assert "upperbound" in pred_columns
+
 
 def test_outbreak_case_subtraction():
     def test_gen():

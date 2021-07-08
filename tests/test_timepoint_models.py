@@ -47,8 +47,8 @@ def test_prediction(train_data, test_data, shared_datadir, Algo):
     saved_predictions = load_predictions(shared_datadir / f"{Algo.__name__}_pred.csv")
 
     # 'upperbound' does not make sense to check for equality, so let's remove it if it exists
-    pred = drop_column_if_exists(pred, 'upperbound')
-    saved_predictions = drop_column_if_exists(saved_predictions, 'upperbound')
+    pred = drop_column_if_exists(pred, "upperbound")
+    saved_predictions = drop_column_if_exists(saved_predictions, "upperbound")
 
     assert_frame_equal(pred, saved_predictions)
 
@@ -70,8 +70,8 @@ def test_long_prediction(train_data, test_data, shared_datadir, Algo):
     saved_predictions = load_predictions(shared_datadir / f"{Algo.__name__}_pred.csv")
 
     # 'upperbound' does not make sense to check for equality, so let's remove it if it exists
-    pred = drop_column_if_exists(pred, 'upperbound')
-    saved_predictions = drop_column_if_exists(saved_predictions, 'upperbound')
+    pred = drop_column_if_exists(pred, "upperbound")
+    saved_predictions = drop_column_if_exists(saved_predictions, "upperbound")
 
     assert_frame_equal(pred, saved_predictions)
 
@@ -116,7 +116,7 @@ def test_prediction_witout_labels(train_data, test_data, shared_datadir, Algo):
     saved_predictions = load_predictions(shared_datadir / f"{Algo.__name__}_pred.csv")
 
     # 'upperbound' does not make sense to check for equality, so let's remove it if it exists
-    pred = drop_column_if_exists(pred, 'upperbound')
-    saved_predictions = drop_column_if_exists(saved_predictions, 'upperbound')
+    pred = drop_column_if_exists(pred, "upperbound")
+    saved_predictions = drop_column_if_exists(saved_predictions, "upperbound")
 
     assert_frame_equal(pred, saved_predictions)

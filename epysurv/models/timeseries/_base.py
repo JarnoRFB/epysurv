@@ -22,7 +22,7 @@ class NonLearningTimeseriesClassificationMixin:
             [time] = prediction.index
 
             # Check if "upperbound" is available and add if available
-            if hasattr(prediction, 'upperbound'):
+            if hasattr(prediction, "upperbound"):
                 [upperbound] = prediction.upperbound
                 upperbounds.append(upperbound)
 
@@ -31,8 +31,6 @@ class NonLearningTimeseriesClassificationMixin:
 
         frame_dict = {"alarm": alarms}
         if len(upperbounds) > 0:
-            frame_dict['upperbound'] = upperbounds
+            frame_dict["upperbound"] = upperbounds
 
-        return pd.DataFrame(
-            frame_dict, index=pd.DatetimeIndex(times, freq="infer")
-        )
+        return pd.DataFrame(frame_dict, index=pd.DatetimeIndex(times, freq="infer"))
