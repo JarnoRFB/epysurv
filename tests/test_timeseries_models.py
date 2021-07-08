@@ -1,7 +1,12 @@
 import numpy as np
 import pandas as pd
+import pytest
 
-from epysurv.models.timeseries import Farrington, GLRPoisson  # type: ignore
+from epysurv.models.timeseries import (  # type: ignore
+    Farrington,
+    FarringtonFlexible,
+    GLRPoisson,
+)
 
 from .utils import load_predictions
 
@@ -15,6 +20,36 @@ def test_farrington_timeseries_prediciton(tsc_generator, shared_datadir):
     )
 
     pd.testing.assert_series_equal(pred.alarm, saved_predictions.alarm)
+
+
+def test_farrington_timeseries_prediction_columns(tsc_generator, shared_datadir):
+    model = Farrington()
+    model.fit(tsc_generator.train_gen)
+    pred = model.predict(tsc_generator.test_gen)
+
+    # check for columns
+    pred_columns = list(pred.columns.values)
+
+    # this one is always here
+    assert "alarm" in pred_columns
+    # but this one should be here if we call predict() with get_alarm_only = False
+    assert "upperbound" in pred_columns
+
+
+def test_farrington_flexible_timeseries_prediction_columns(
+    tsc_generator, shared_datadir
+):
+    model = FarringtonFlexible()
+    model.fit(tsc_generator.train_gen)
+    pred = model.predict(tsc_generator.test_gen)
+
+    # check for columns
+    pred_columns = list(pred.columns.values)
+
+    # this one is always here
+    assert "alarm" in pred_columns
+    # but this one should be here if we call predict() with get_alarm_only = False
+    assert "upperbound" in pred_columns
 
 
 def test_outbreak_case_subtraction():
