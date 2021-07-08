@@ -19,7 +19,7 @@ from epysurv.models.timepoint import (
     OutbreakP,
 )
 
-from .utils import load_predictions, drop_column_if_exists
+from .utils import drop_column_if_exists, load_predictions
 
 algos_to_test = [
     EarsC1,

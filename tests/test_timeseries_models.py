@@ -1,9 +1,12 @@
-import pytest
-
 import numpy as np
 import pandas as pd
+import pytest
 
-from epysurv.models.timeseries import Farrington, FarringtonFlexible, GLRPoisson  # type: ignore
+from epysurv.models.timeseries import (  # type: ignore
+    Farrington,
+    FarringtonFlexible,
+    GLRPoisson,
+)
 
 from .utils import load_predictions
 
