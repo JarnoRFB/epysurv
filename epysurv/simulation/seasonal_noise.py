@@ -4,10 +4,11 @@ from typing import Optional, Sequence
 import numpy as np
 import pandas as pd
 import rpy2.robjects.packages as rpackages
-from epysurv.simulation.base import BaseSimulation
-from epysurv.simulation.utils import add_date_time_index_to_frame, r_list_to_frame
 from rpy2 import robjects
 from scipy.stats import nbinom, poisson
+
+from epysurv.simulation.base import BaseSimulation
+from epysurv.simulation.utils import add_date_time_index_to_frame, r_list_to_frame
 
 surveillance = rpackages.importr("surveillance")
 
@@ -187,7 +188,7 @@ class SeasonalNoiseNegativeBinomial(BaseSimulation):
         else:
             cases = []
             for mu in mu_s:
-                r = np.float(mu / (self.dispersion - 1))
+                r = mu / (self.dispersion - 1)
                 p = r / (r + mu)
                 cases.append(nbinom.rvs(r, p, size=1)[0])
         return (
