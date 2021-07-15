@@ -42,8 +42,7 @@ def tsc_generator(train_data, test_data):
 
 @pytest.fixture
 def filter_combination(shared_datadir):
-    with open(shared_datadir / "cases.pickle", "rb") as handle:
-        cases = pickle.load(handle)
+    cases = pd.read_pickle(shared_datadir / "cases.pickle")
     cases_in_berlin = cases.query('county == "Berlin"')
     return FilterCombination(
         disease="SAL", county="Berlin", pathogen="SAL", data=cases_in_berlin
