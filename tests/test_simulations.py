@@ -10,7 +10,7 @@ from epysurv.simulation import (
     SeasonalNoisePoisson,
 )
 
-from .utils import load_simulations
+from tests.utils import load_simulations
 
 
 @pytest.mark.parametrize(
