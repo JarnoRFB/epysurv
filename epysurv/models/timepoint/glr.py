@@ -22,6 +22,21 @@ class GLRNegativeBinomial(STSBasedAlgorithm):
 
     Attributes
     ----------
+    m0
+        A vector of in-control values of the mean of the Poisson / negative binomial
+        distribution with the same length as range. If NULL the observed values in
+        1:(min(range)-1) are used to estimate the beta vector through a generalized
+        linear model. To fine-tune the model one can instead specify mu0 as a
+        list with two components:
+        S integer number of harmonics to include (typically 1 or 2)
+        trend A Boolean indicating whether to include a term t in the GLM model
+        The fitting is controlled by the estimateGLRNbHook function. The incontrol
+        mean model is re-fitted after every alarm. The fitted models can
+        be found as a list mod in the control slot after the call.
+        Note: If a value for alpha is given, then the inverse of this value is used
+        as fixed theta in a negative.binomial glm. If is.null(alpha) then the
+        parameter is estimated as well (using glm.nb) – see the description of this
+        parameter for details
     alpha
         The (known) dispersion parameter of the negative binomial distribution,
         i.e. the parametrization of the negative binomial is such that the variance
@@ -40,6 +55,9 @@ class GLRNegativeBinomial(STSBasedAlgorithm):
         To always look back until the first observation use -1.
     change
         A string specifying the type of the alternative. The two choices are "intercept" and "epi".
+    theta
+        if NULL then the GLR scheme is used. If not NULL the prespecified value
+        for κ or λ is used in a recursive LR scheme, which is faster.
     direction
         Specifying the direction of testing in GLR scheme.
         - ("inc",) only increases in x are considered in the GLR-statistic
@@ -62,10 +80,12 @@ class GLRNegativeBinomial(STSBasedAlgorithm):
         doi: 10.18637/jss.v070.i10
     """
 
+    m0: float = robjects.NULL
     alpha: float = 0
     glr_test_threshold: int = 5
     m: int = -1
     change: str = "intercept"
+    theta: float = robjects.NULL
     direction: Union[Tuple[str, str], Tuple[str]] = ("inc", "dec")
     upperbound_statistic: str = "cases"
     x_max: float = 1e4
@@ -75,13 +95,13 @@ class GLRNegativeBinomial(STSBasedAlgorithm):
             **{
                 "range": detection_range,
                 "c.ARL": self.glr_test_threshold,
-                "m0": robjects.NULL,
+                "m0": self.m0,
                 "alpha": self.alpha,
                 # Mtilde is set to 1, since that is the only valid value for "epi" and "intercept"
                 "Mtilde": 1,
                 "M": self.m,
                 "change": self.change,
-                "theta": robjects.NULL,
+                "theta": self.theta,
                 "dir": r.c(*self.direction),
                 "ret": self.upperbound_statistic,
                 "xMax": self.x_max,
