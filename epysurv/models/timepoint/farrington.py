@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 
+import numpy as np
+import pandas as pd
 from rpy2.robjects import r
 from rpy2.robjects.packages import importr
 
@@ -148,6 +150,8 @@ class FarringtonFlexible(STSBasedAlgorithm):
     threshold_method: str = "delta"
 
     def _call_surveillance_algo(self, sts, detection_range):
+
+        self._check_enough_reference_data_available(detection_range, sts)
         control = r.list(
             range=detection_range,
             b=self.years_back,
@@ -165,3 +169,19 @@ class FarringtonFlexible(STSBasedAlgorithm):
 
         surv = surveillance.farringtonFlexible(sts, control=control)
         return surv
+
+    def _check_enough_reference_data_available(self, detection_range, sts):
+        dates = pd.to_datetime(np.asarray(sts.slots["epoch"]), unit="D")
+        py_detection_range = np.asarray(detection_range) - 1
+        prediction_dates = dates[py_detection_range]
+        required_reference_data = (
+            prediction_dates - (np.timedelta64(1, "Y") * self.years_back)
+        ).floor("D")
+        available_reference_data = dates[: (py_detection_range)[0]]
+        if not available_reference_data.min() < required_reference_data.min():
+            raise ValueError(
+                f"You are trying to use reference data from {self.years_back} years back for predictions "
+                f"starting from {prediction_dates[0].date()}, but the "
+                f"reference data goes only back until {available_reference_data.min().date()}. "
+                "Try setting a lower value for `years_back` or provide more reference data."
+            )
