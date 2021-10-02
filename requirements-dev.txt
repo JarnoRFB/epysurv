@@ -4,8 +4,9 @@ pytest
 pytest-datadir
 pytest-cov
 codecov
-black==19.10b0
+black==21.9b0
 mypy==0.910
+isort==5.9.3
 flake8
 pep8-naming
 flake8-docstrings

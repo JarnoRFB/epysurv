@@ -4,7 +4,6 @@ repos:
     rev: "v5.9.3"
     hooks:
       - id: isort
-        additional_dependencies: ["isort[pyproject]"]
   - repo: https://github.com/psf/black
     rev: 21.9b0
     hooks:
@@ -17,5 +16,5 @@ repos:
     rev: 3.9.2
     hooks:
       - id: flake8
-        exclude: ^(tests|examples|docs)/*
+        exclude: ^(tests|examples|docs)/.*
         additional_dependencies: [pep8-naming, flake8-docstrings]

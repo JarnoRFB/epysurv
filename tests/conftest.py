@@ -26,7 +26,10 @@ def test_data(shared_datadir):
 
 def _load_data(filepath):
     data = pd.read_csv(
-        filepath, index_col=0, parse_dates=True, infer_datetime_format=True,
+        filepath,
+        index_col=0,
+        parse_dates=True,
+        infer_datetime_format=True,
     )
     data.index.freq = pd.infer_freq(data.index)
     return data
