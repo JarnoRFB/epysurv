@@ -129,3 +129,27 @@ def test_prediction_witout_labels(train_data, test_data, shared_datadir, Algo):
     saved_predictions = drop_column_if_exists(saved_predictions, "upperbound")
 
     assert_frame_equal(pred, saved_predictions)
+
+
+def test_farrington_flexible__raises_on_too_less_reference_data():
+
+    model = FarringtonFlexible()
+
+    total_periods = 100
+    test_size = 20
+    case_count = 10
+
+    dates = pd.date_range("2017-07-09", periods=total_periods, freq="W")
+    case_counts = [case_count] * total_periods
+
+    df = pd.DataFrame({"n_cases": case_counts}, index=dates)
+
+    train_data = df[: -1 * test_size]
+    test_data = df[-1 * test_size :]
+
+    model.fit(train_data)
+    with pytest.raises(
+        ValueError,
+        match="You are trying to use reference data from 3 years back for predictions starting from 2019-01-20",
+    ):
+        _ = model.predict(test_data)

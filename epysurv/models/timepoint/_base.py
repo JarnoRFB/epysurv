@@ -178,13 +178,12 @@ class STSBasedAlgorithm(SurveillanceRPackageAlgorithm):
 
         sts = surveillance.sts(
             start=r.c(data.index[0].year, _get_start_epoch(data)),
-            epoch=robjects.IntVector(
+            epoch=robjects.DateVector(
                 [
                     r["as.numeric"](r["as.Date"](d.isoformat()))[0]
                     for d in data.index.date
                 ]
             ),
-            # epoch=data.index,
             freq=_get_freq(data),
             observed=data["n_cases"].values,
             epochAsDate=True,
