@@ -26,7 +26,7 @@ def test_simulate_outbreaks(SimulationAlgo, shared_datadir):
     saved_simulation = load_simulations(
         shared_datadir / f"{SimulationAlgo.__name__}_simulation.csv"
     )
-    assert_frame_equal(simulated, saved_simulation)
+    assert_frame_equal(simulated.astype({"n_cases": "int64"}), saved_simulation)
 
 
 @pytest.mark.parametrize(
