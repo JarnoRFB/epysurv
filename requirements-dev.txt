@@ -10,4 +10,4 @@ flake8
 pep8-naming
 flake8-docstrings
 pre-commit
-
+isort

@@ -59,6 +59,7 @@ in the project's root directory.
 If you want to contribute to the documentation, run
 
     pip install -r requirements-doc.txt
+    conda install pandoc
 
 to install the necessary packages for building the sphinx documentation.
 
