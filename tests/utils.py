@@ -19,3 +19,9 @@ def load_simulations(filepath):
     )
     freq = pd.infer_freq(simulations.index)
     return simulations.asfreq(freq)
+
+
+def drop_column_if_exists(df, column):
+    if column in df.columns:
+        df = df.drop(columns=column)
+    return df

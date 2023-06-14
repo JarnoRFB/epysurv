@@ -188,7 +188,7 @@ class SeasonalNoiseNegativeBinomial(BaseSimulation):
         else:
             cases = []
             for mu in mu_s:
-                r = np.float(mu / (self.dispersion - 1))
+                r = mu / (self.dispersion - 1)
                 p = r / (r + mu)
                 cases.append(nbinom.rvs(r, p, size=1)[0])
         return (

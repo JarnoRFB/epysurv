@@ -9,6 +9,7 @@ class NonLearningTimeseriesClassificationMixin:
 
     def predict(self, data_generator) -> pd.DataFrame:
         alarms = []
+        upperbounds = []
         times = []
         for x, _ in data_generator:
             # Fit on all data, except the last point, that is to be predicted.
@@ -19,8 +20,17 @@ class NonLearningTimeseriesClassificationMixin:
             # As only a single value should be returned, we can access this single item.
             [alarm] = prediction.alarm
             [time] = prediction.index
+
+            # Check if "upperbound" is available and add if available
+            if hasattr(prediction, "upperbound"):
+                [upperbound] = prediction.upperbound
+                upperbounds.append(upperbound)
+
             alarms.append(alarm)
             times.append(time)
-        return pd.DataFrame(
-            {"alarm": alarms}, index=pd.DatetimeIndex(times, freq="infer")
-        )
+
+        frame_dict = {"alarm": alarms}
+        if len(upperbounds) > 0:
+            frame_dict["upperbound"] = upperbounds
+
+        return pd.DataFrame(frame_dict, index=pd.DatetimeIndex(times, freq="infer"))

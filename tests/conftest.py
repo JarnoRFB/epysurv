@@ -26,7 +26,10 @@ def test_data(shared_datadir):
 
 def _load_data(filepath):
     data = pd.read_csv(
-        filepath, index_col=0, parse_dates=True, infer_datetime_format=True,
+        filepath,
+        index_col=0,
+        parse_dates=True,
+        infer_datetime_format=True,
     )
     data.index.freq = pd.infer_freq(data.index)
     return data
@@ -42,8 +45,7 @@ def tsc_generator(train_data, test_data):
 
 @pytest.fixture
 def filter_combination(shared_datadir):
-    with open(shared_datadir / "cases.pickle", "rb") as handle:
-        cases = pickle.load(handle)
+    cases = pd.read_pickle(shared_datadir / "cases.pickle")
     cases_in_berlin = cases.query('county == "Berlin"')
     return FilterCombination(
         disease="SAL", county="Berlin", pathogen="SAL", data=cases_in_berlin

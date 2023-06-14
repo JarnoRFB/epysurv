@@ -1,6 +1,7 @@
 import pandas as pd
-from epysurv.simulation.utils import add_date_time_index_to_frame, r_list_to_frame
 from rpy2 import robjects
+
+from epysurv.simulation.utils import add_date_time_index_to_frame, r_list_to_frame
 
 
 def test_add_date_time_index_to_frame():
