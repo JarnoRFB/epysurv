@@ -20,7 +20,7 @@ This package was originally developed at the Robert Koch Institute in the `Signa
 
    1_quickstart.rst
    2_outbreak_detection.rst
-   3_data_simulation.rst
+   3_simulations.rst
    4_user_guide.rst
    api_doc/modules.rst
 
