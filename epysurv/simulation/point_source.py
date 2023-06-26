@@ -29,9 +29,9 @@ class PointSource(BaseSimulation):
     frequency
         Factor in oscillation term. Is multiplied with the annual term :math:`\omega` and the current time point.
     p
-        Probability to get a new outbreak at time :math:`t` if there was one at time :math:`t-1`.
-    r
         Probability to get no new outbreak at time :math:`t` if there was none at time :math:`t-1`.
+    r
+        Probability to get a new outbreak at time :math:`t` if there was one at time :math:`t-1`.
     seasonal_move
         A term added to time point :math:`t` to move the curve along the x-axis.
     seed
