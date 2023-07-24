@@ -7,8 +7,8 @@ sys.path.insert(0, os.path.abspath(".."))
 # -- Project information -----------------------------------------------------
 
 project = "epysurv"
-copyright = "2019, Rüdiger Busche"
-author = "Rüdiger Busche and Justin Shenk"
+copyright = "2020, Rüdiger Busche"
+author = "Rüdiger Busche Auss Abbood, and Justin Shenk"
 
 
 # -- General configuration ---------------------------------------------------

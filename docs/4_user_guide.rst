@@ -80,3 +80,20 @@ for a more detailed discussion. Therefore, bot ``fit`` and
 ``Iterable[Tuple[DataFrame, bool]]``. The label indicates whether
 the last time point of the time series is to be considered an outbreak.
 The ``predict`` method in this case only returns a time series of alarms.
+
+Simulating Epidemiological Data
+-------------------------------
+Epysurv provides the methods to simulate endemic timeseries, using 
+the ``SeasonalNoisePoisson`` and ``SeasonalNoiseNegativeBinomial`` and 
+epidemic timeseries, using the ``PointSource`` class. All simulations 
+can be tuned to simulate different seasonality, trends, and other 
+characteristics during instantiation. Every simulation needs to implement 
+the ``simulate`` method that at least takes a `length` parameter that 
+determines how many observation should be simulated. Additionally, if the 
+timeseries is supposed to be epidemic, we can define the ``state``, i.e., a sequence of 
+equal length to the amount of simulations that encodes outbreaks. A ``1`` in the 
+``state`` sequence indicates an outbreak and ``0`` otherwise. This is also shown in the
+`quick tour <demo.ipynb>`_. Optionally, we can run a
+Markov chain to randomly generate states where its transition probabilities can be adjusted.. 
+
+

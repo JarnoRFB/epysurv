@@ -166,8 +166,8 @@ class SeasonalNoiseNegativeBinomial(BaseSimulation):
     def simulate(self, length: int) -> pd.DataFrame:
         r"""Simulate outbreaks.
 
-        Parameter
-        ---------
+        Parameters
+        ----------
         length
             Number of weeks to model.
 
